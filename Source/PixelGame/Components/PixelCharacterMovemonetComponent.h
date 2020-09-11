@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Character/PixelGameCharacter.h"
 #include "PixelCharacterMovemonetComponent.generated.h"
 
 
@@ -24,5 +25,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+public:
+	UFUNCTION()
+	void MoveLeftRight(APixelGameCharacter* PixelCharacter, float Value);
+
+	UFUNCTION()
+	void MoveUpDown(APixelGameCharacter* PixelCharacter, float Value);
 };

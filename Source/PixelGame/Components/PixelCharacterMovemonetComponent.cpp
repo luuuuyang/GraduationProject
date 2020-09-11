@@ -32,3 +32,36 @@ void UPixelCharacterMovemonetComponent::TickComponent(float DeltaTime, ELevelTic
 	// ...
 }
 
+void UPixelCharacterMovemonetComponent::MoveLeftRight(APixelGameCharacter* PixelCharacter, float Value)
+{
+	if (Value != 0.0f)
+	{
+		PixelCharacter->SetIsMoving(true);
+		PixelCharacter->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), Value);
+	}
+	else
+	{
+		PixelCharacter->SetIsMoving(false);
+	}
+
+	PixelCharacter->SetCanTurn(true);
+}
+
+void UPixelCharacterMovemonetComponent::MoveUpDown(APixelGameCharacter* PixelCharacter, float Value)
+{
+	if (Value > 0.0f)
+	{
+		PixelCharacter->SetPressUp(true);
+		PixelCharacter->SetPressDown(false);
+	} 
+	else if (Value < 0.0f)
+	{
+		PixelCharacter->SetPressUp(false);
+		PixelCharacter->SetPressDown(true);
+	}
+	else
+	{
+		PixelCharacter->SetPressUp(false);
+		PixelCharacter->SetPressDown(false);
+	}
+}

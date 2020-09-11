@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
+#include "Components/PixelCharacterMovemonetComponent.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -31,6 +32,9 @@ class APixelGameCharacter : public APaperCharacter
 
 	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
+
+	UPROPERTY()
+	class UPixelCharacterMovemonetComponent* PixelCharacterMovemonetComponent;
 protected:
 	// The animation to play while running around
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
@@ -42,9 +46,6 @@ protected:
 
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
-
-	/** Called for side to side input */
-	void MoveRight(float Value);
 
 	void UpdateCharacter();
 
@@ -65,4 +66,34 @@ public:
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+// 公共接口
+public:
+	UFUNCTION()
+	void MoveLeftRight(float Value);
+
+	UFUNCTION()
+	void MoveUpDown(float Value);
+
+//GetSet接口
+public:
+	FORCEINLINE void SetIsMoving(bool Value) { IsMoving = Value; }
+	FORCEINLINE bool GetIsMoving() const { return IsMoving; }
+	FORCEINLINE void SetCanTurn(bool Value) { CanTurn = Value; }
+	FORCEINLINE bool GetCanTurn() const { return CanTurn; }
+	FORCEINLINE void SetPressUp(bool Value) { PressUp = Value; }
+	FORCEINLINE bool GetPressUp() const { return PressUp; }
+	FORCEINLINE void SetPressDown(bool Value) { PressDown = Value; }
+	FORCEINLINE bool GetPressDown() const { return PressDown; }
+
+// 变量
+protected:
+	UPROPERTY()
+	bool IsMoving;
+	UPROPERTY()
+	bool CanTurn;
+	UPROPERTY()
+	bool PressUp;
+	UPROPERTY()
+	bool PressDown;
 };

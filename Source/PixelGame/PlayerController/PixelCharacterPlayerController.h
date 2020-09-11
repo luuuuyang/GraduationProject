@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Character/PixelGameCharacter.h"
 #include "PixelCharacterPlayerController.generated.h"
 
 /**
@@ -13,5 +14,20 @@ UCLASS()
 class PIXELGAME_API APixelCharacterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void SetupInputComponent() override;
+
+protected:
+	UFUNCTION()
+	void OnMoveLeftRight(float Value);
+
+	UFUNCTION()
+	void OnMoveUpDown(float Value);
+
+private:
+	UPROPERTY()
+	APixelGameCharacter* PixelCharacter;
 };
