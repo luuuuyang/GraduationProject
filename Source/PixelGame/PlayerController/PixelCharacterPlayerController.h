@@ -27,6 +27,12 @@ protected:
 	UFUNCTION()
 	void OnMoveUpDown(float Value);
 
+	UFUNCTION()
+	void OnJump();
+
+	UFUNCTION()
+	void OnStopJump();
+
 private:
 	UPROPERTY()
 	APixelGameCharacter* PixelCharacter;

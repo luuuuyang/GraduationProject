@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PixelCharacterMovemonetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values for this component's properties
 UPixelCharacterMovemonetComponent::UPixelCharacterMovemonetComponent()
@@ -64,4 +65,22 @@ void UPixelCharacterMovemonetComponent::MoveUpDown(APixelGameCharacter* PixelCha
 		PixelCharacter->SetPressUp(false);
 		PixelCharacter->SetPressDown(false);
 	}
+}
+
+void UPixelCharacterMovemonetComponent::Jump(APixelGameCharacter* PixelCharacter)
+{
+	if (!PixelCharacter->CanJump() && PixelCharacter->GetCharacterMovement()->IsFalling())
+	{
+		PixelCharacter->SetIsJumping(false);
+	}
+	else
+	{
+		PixelCharacter->SetIsJumping(true);
+		PixelCharacter->Jump();
+	}
+}
+
+void UPixelCharacterMovemonetComponent::StopJump(APixelGameCharacter* PixelCharacter)
+{
+
 }

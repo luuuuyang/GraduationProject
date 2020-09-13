@@ -17,14 +17,28 @@ void APixelCharacterPlayerController::SetupInputComponent()
 
 	InputComponent->BindAxis("MoveRight", this, &APixelCharacterPlayerController::OnMoveLeftRight);
 	InputComponent->BindAxis("MoveDown", this, &APixelCharacterPlayerController::OnMoveUpDown);
+
+	InputComponent->BindAction("Jump", IE_Pressed, this, &APixelCharacterPlayerController::OnJump);
+	InputComponent->BindAction("Jump", IE_Released, this, &APixelCharacterPlayerController::OnStopJump);
 }
 
 void APixelCharacterPlayerController::OnMoveLeftRight(float Value)
 {
 	PixelCharacter->MoveLeftRight(Value);
+	UE_LOG(LogTemp, Warning, TEXT("Press AD"))
 }
 
 void APixelCharacterPlayerController::OnMoveUpDown(float Value)
 {
 	PixelCharacter->MoveUpDown(Value);
+}
+
+void APixelCharacterPlayerController::OnJump()
+{
+	PixelCharacter->BeginJump();
+}
+
+void APixelCharacterPlayerController::OnStopJump()
+{
+	PixelCharacter->StopJump();
 }

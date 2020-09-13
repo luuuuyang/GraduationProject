@@ -5,9 +5,20 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "Components/PixelCharacterMovemonetComponent.h"
+#include "Animation/AnimInstance.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
+
+UENUM(BlueprintType)
+enum class AnimationStateEnum : uint8
+{
+	NONE UMETA(DisplayName = "None"),
+	IDLE UMETA(DisplayName = "Idle"),
+	RUN UMETA(DisplayName = "Run"),
+	JUMP UMETA(DisplayName = "Jump"),
+	FALL UMETA(DisplayName = "Fall")
+};
 
 /**
  * This class is the default character for PixelGame, and it is responsible for all
@@ -31,29 +42,33 @@ class APixelGameCharacter : public APaperCharacter
 	class USpringArmComponent* CameraBoom;
 
 	UTextRenderComponent* TextComponent;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY()
 	class UPixelCharacterMovemonetComponent* PixelCharacterMovemonetComponent;
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enums)
+	AnimationStateEnum AnimationState = AnimationStateEnum::NONE;
+
 	// The animation to play while running around
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* RunningAnimation;
 
 	// The animation to play while idle (standing still)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* IdleAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* JumpingAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* FallingAnimation;
+
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
 	void UpdateCharacter();
-
-	/** Handle touch inputs. */
-	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
-
-	/** Handle touch stop event. */
-	void TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location);
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -67,7 +82,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-// π´π≤Ω”ø⁄
+// ÂáΩÊï∞Êé•Âè£
 public:
 	UFUNCTION()
 	void MoveLeftRight(float Value);
@@ -75,25 +90,57 @@ public:
 	UFUNCTION()
 	void MoveUpDown(float Value);
 
-//GetSetΩ”ø⁄
+	UFUNCTION()
+	void BeginJump();
+
+	UFUNCTION()
+	void StopJump();
+
+
+//GetSetÊé•Âè£
 public:
+	FORCEINLINE void SetAnimationState(AnimationStateEnum Value) { AnimationState = Value; }
+	FORCEINLINE AnimationStateEnum GetAnimationState() const { return AnimationState; }
+
 	FORCEINLINE void SetIsMoving(bool Value) { IsMoving = Value; }
 	FORCEINLINE bool GetIsMoving() const { return IsMoving; }
+
 	FORCEINLINE void SetCanTurn(bool Value) { CanTurn = Value; }
 	FORCEINLINE bool GetCanTurn() const { return CanTurn; }
+
 	FORCEINLINE void SetPressUp(bool Value) { PressUp = Value; }
 	FORCEINLINE bool GetPressUp() const { return PressUp; }
+
 	FORCEINLINE void SetPressDown(bool Value) { PressDown = Value; }
 	FORCEINLINE bool GetPressDown() const { return PressDown; }
 
-// ±‰¡ø
+	FORCEINLINE void SetIsJumping(bool Value) { IsJumping = Value; }
+	FORCEINLINE bool GetIsJumping() const { return IsJumping; }
+
+	FORCEINLINE void SetIsFalling(bool Value) { IsFalling = Value; }
+	FORCEINLINE bool GetIsFalling() const { return IsFalling; }
+
+// ÂèòÈáè
 protected:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	bool IsMoving;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	bool CanTurn;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	bool PressUp;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	bool PressDown;
+	UPROPERTY(BlueprintReadWrite)
+	bool IsJumping;
+	UPROPERTY(BlueprintReadWrite)
+	bool IsFalling;
+
+// ÂÆöÊó∂Âô®Âè•ÊüÑ
+protected:
+	FTimerHandle EndJumpTimerHandle;
+	FTimerHandle PlayFallingAnimationHandle;
+// ÂÆöÊó∂Âô®ÂßîÊâò
+protected:
+	void EndJumpDelegate();
+	void PlayFallingAnimationDelegate();
 };

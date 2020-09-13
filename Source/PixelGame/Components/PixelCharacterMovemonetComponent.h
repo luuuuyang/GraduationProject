@@ -31,4 +31,11 @@ public:
 
 	UFUNCTION()
 	void MoveUpDown(APixelGameCharacter* PixelCharacter, float Value);
+
+	UFUNCTION()
+	void Jump(APixelGameCharacter* PixelCharacter);
+
+	UFUNCTION()
+	void StopJump(APixelGameCharacter* PixelCharacter);
+
 };

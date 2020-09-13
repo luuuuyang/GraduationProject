@@ -65,11 +65,95 @@ APixelGameCharacter::APixelGameCharacter()
 
 void APixelGameCharacter::UpdateAnimation()
 {
-	const FVector PlayerVelocity = GetVelocity();
-	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
+	switch (AnimationState)
+	{
+	case AnimationStateEnum::NONE:
+		break;
+	case AnimationStateEnum::IDLE:
+		if (IsMoving)
+		{
+			AnimationState = AnimationStateEnum::RUN;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Run"))
+		}
+		if (IsJumping)
+		{
+			AnimationState = AnimationStateEnum::JUMP;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
+		}
+		if (IsFalling)
+		{
+			AnimationState = AnimationStateEnum::FALL;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+		}
+		break;
+	case AnimationStateEnum::RUN:
+		if (!IsMoving)
+		{
+			AnimationState = AnimationStateEnum::IDLE;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+		}
+		if (IsJumping)
+		{
+			AnimationState = AnimationStateEnum::JUMP;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
+		}
+		if (IsFalling)
+		{
+			AnimationState = AnimationStateEnum::FALL;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+		}
+		break;
+	case AnimationStateEnum::JUMP:
+		if (!IsJumping && !IsFalling)
+		{
+			AnimationState = AnimationStateEnum::IDLE;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+		}
+		if (IsFalling)
+		{
+			if (!GetWorldTimerManager().IsTimerActive(PlayFallingAnimationHandle))
+			{
+				GetWorldTimerManager().SetTimer(PlayFallingAnimationHandle, this, &APixelGameCharacter::PlayFallingAnimationDelegate, 0.2f, false);
+			}
+		}
+		break;
+	case AnimationStateEnum::FALL:
+		if (!IsFalling)
+		{
+			AnimationState = AnimationStateEnum::IDLE;
+			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+		}
+		break;
+	default:
+		break;
+	}
 
-	// Are we moving or standing still?
-	UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
+	UPaperFlipbook* DesiredAnimation = IdleAnimation;
+
+	switch (AnimationState)
+	{
+	case AnimationStateEnum::NONE:
+		break;
+	case AnimationStateEnum::IDLE:
+		DesiredAnimation = IdleAnimation;
+		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Idle"))
+		break;
+	case AnimationStateEnum::RUN:
+		DesiredAnimation = RunningAnimation;
+		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Running"))
+		break;
+	case AnimationStateEnum::JUMP:
+		DesiredAnimation = JumpingAnimation;
+		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Jumping"))
+		break;
+	case AnimationStateEnum::FALL:
+		DesiredAnimation = FallingAnimation;
+		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Falling"))
+		break;
+	default:
+		break;
+	}
+
 	if (GetSprite()->GetFlipbook() != DesiredAnimation)
 	{
 		GetSprite()->SetFlipbook(DesiredAnimation);
@@ -80,7 +164,7 @@ void APixelGameCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	UpdateCharacter();	
+	UpdateCharacter();
 }
 
 
@@ -90,17 +174,12 @@ void APixelGameCharacter::Tick(float DeltaSeconds)
 void APixelGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAxis("MoveRight", this, &APixelGameCharacter::MoveRight);
-
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &APixelGameCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &APixelGameCharacter::TouchStopped);
 }
 
 void APixelGameCharacter::MoveLeftRight(float Value)
 {
 	PixelCharacterMovemonetComponent->MoveLeftRight(this, Value);
+	
 	if (CanTurn)
 	{
 		if (Value > 0.0f)
@@ -119,15 +198,18 @@ void APixelGameCharacter::MoveUpDown(float Value)
 	PixelCharacterMovemonetComponent->MoveUpDown(this, Value);
 }
 
-void APixelGameCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
+void APixelGameCharacter::BeginJump()
 {
-	// Jump on any touch
-	Jump();
+	PixelCharacterMovemonetComponent->Jump(this);
+	if (IsJumping)
+	{
+		GetWorldTimerManager().SetTimer(EndJumpTimerHandle, this, &APixelGameCharacter::EndJumpDelegate, 0.1f, false);
+	}
 }
 
-void APixelGameCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location)
+void APixelGameCharacter::StopJump()
 {
-	// Cease jumping once touch stopped
+	PixelCharacterMovemonetComponent->StopJump(this);
 	StopJumping();
 }
 
@@ -135,4 +217,18 @@ void APixelGameCharacter::UpdateCharacter()
 {
 	// Update animation to match the motion
 	UpdateAnimation();
+}
+
+
+void APixelGameCharacter::EndJumpDelegate()
+{
+	SetIsJumping(false);
+	SetIsFalling(true);
+}
+
+void APixelGameCharacter::PlayFallingAnimationDelegate()
+{
+	AnimationState = AnimationStateEnum::FALL;
+	GetWorldTimerManager().ClearTimer(PlayFallingAnimationHandle);
+	UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 }
