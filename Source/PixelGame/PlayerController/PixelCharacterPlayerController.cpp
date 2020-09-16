@@ -20,6 +20,10 @@ void APixelCharacterPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("Jump", IE_Pressed, this, &APixelCharacterPlayerController::OnJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &APixelCharacterPlayerController::OnStopJump);
+
+	InputComponent->BindAction("Attack", IE_Pressed, this, &APixelCharacterPlayerController::OnAttack);
+
+	InputComponent->BindAction("Interact", IE_Pressed, this, &APixelCharacterPlayerController::OnInteract);
 }
 
 void APixelCharacterPlayerController::OnMoveLeftRight(float Value)
@@ -41,4 +45,14 @@ void APixelCharacterPlayerController::OnJump()
 void APixelCharacterPlayerController::OnStopJump()
 {
 	PixelCharacter->StopJump();
+}
+
+void APixelCharacterPlayerController::OnAttack()
+{
+	PixelCharacter->Attack();
+}
+
+void APixelCharacterPlayerController::OnInteract()
+{
+	PixelCharacter->Interact();
 }

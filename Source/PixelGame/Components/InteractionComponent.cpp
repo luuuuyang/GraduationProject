@@ -2,13 +2,16 @@
 
 
 #include "InteractionComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Interfaces/ItemInteractionInterface.h"
+#include "Items/PickupItem.h"
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -32,3 +35,13 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UInteractionComponent::InteractEvent(TArray<AActor*> OverlappingActors)
+{
+	for (auto Actors : OverlappingActors)
+	{
+		if (Actors->GetClass()->ImplementsInterface(UItemInteractionInterface::StaticClass()))
+		{
+			Cast<APickupItem>(Actors)->Interact(GetOwner());
+		}
+	}
+}

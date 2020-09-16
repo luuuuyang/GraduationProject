@@ -58,6 +58,8 @@ APixelGameCharacter::APixelGameCharacter()
 	bReplicates = true;
 
 	PixelCharacterMovemonetComponent = CreateDefaultSubobject<UPixelCharacterMovemonetComponent>(TEXT("PixelCharacterMovement"));
+	AttackComponent = CreateDefaultSubobject<UAttackComponent>(TEXT("AttackComponent"));
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -124,6 +126,10 @@ void APixelGameCharacter::UpdateAnimation()
 			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
 		break;
+	case AnimationStateEnum::ATTACK:
+		break;
+	case AnimationStateEnum::ATTACKRUN:
+		break;
 	default:
 		break;
 	}
@@ -143,12 +149,16 @@ void APixelGameCharacter::UpdateAnimation()
 		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Running"))
 		break;
 	case AnimationStateEnum::JUMP:
-		DesiredAnimation = JumpingAnimation;
+		DesiredAnimation = JumpAnimation;
 		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Jumping"))
 		break;
 	case AnimationStateEnum::FALL:
-		DesiredAnimation = FallingAnimation;
+		DesiredAnimation = FallAnimation;
 		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Falling"))
+		break;
+	case AnimationStateEnum::ATTACK:
+		break;
+	case AnimationStateEnum::ATTACKRUN:
 		break;
 	default:
 		break;
@@ -171,10 +181,6 @@ void APixelGameCharacter::Tick(float DeltaSeconds)
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void APixelGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
-}
 
 void APixelGameCharacter::MoveLeftRight(float Value)
 {
@@ -211,6 +217,18 @@ void APixelGameCharacter::StopJump()
 {
 	PixelCharacterMovemonetComponent->StopJump(this);
 	StopJumping();
+}
+
+void APixelGameCharacter::Attack()
+{
+	SetIsAttacking(true);
+}
+
+void APixelGameCharacter::Interact()
+{
+	TArray<AActor*> OverlappingActors;
+	GetOverlappingActors(OverlappingActors);
+	InteractionComponent->InteractEvent(OverlappingActors);
 }
 
 void APixelGameCharacter::UpdateCharacter()

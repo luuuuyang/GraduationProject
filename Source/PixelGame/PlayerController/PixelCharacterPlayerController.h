@@ -33,6 +33,12 @@ protected:
 	UFUNCTION()
 	void OnStopJump();
 
+	UFUNCTION()
+	void OnAttack();
+
+	UFUNCTION()
+	void OnInteract();
+
 private:
 	UPROPERTY()
 	APixelGameCharacter* PixelCharacter;

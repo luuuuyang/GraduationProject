@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "Components/PixelCharacterMovemonetComponent.h"
-#include "Animation/AnimInstance.h"
+#include "Components/AttackComponent.h"
+#include "Components/InteractionComponent.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -17,7 +18,9 @@ enum class AnimationStateEnum : uint8
 	IDLE UMETA(DisplayName = "Idle"),
 	RUN UMETA(DisplayName = "Run"),
 	JUMP UMETA(DisplayName = "Jump"),
-	FALL UMETA(DisplayName = "Fall")
+	FALL UMETA(DisplayName = "Fall"),
+	ATTACK UMETA(DisplayName = "Attack"),
+	ATTACKRUN UMETA(DisplayName = "AttackRun")
 };
 
 /**
@@ -47,6 +50,12 @@ class APixelGameCharacter : public APaperCharacter
 
 	UPROPERTY()
 	class UPixelCharacterMovemonetComponent* PixelCharacterMovemonetComponent;
+
+	UPROPERTY()
+	class UAttackComponent* AttackComponent;
+
+	UPROPERTY()
+	class UInteractionComponent* InteractionComponent;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enums)
 	AnimationStateEnum AnimationState = AnimationStateEnum::NONE;
@@ -60,19 +69,21 @@ protected:
 	class UPaperFlipbook* IdleAnimation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* JumpingAnimation;
+	class UPaperFlipbook* JumpAnimation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* FallingAnimation;
+	class UPaperFlipbook* FallAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* AttackAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* AttackRunAnimation;
 
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
 	void UpdateCharacter();
-
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	// End of APawn interface
 
 public:
 	APixelGameCharacter();
@@ -96,6 +107,11 @@ public:
 	UFUNCTION()
 	void StopJump();
 
+	UFUNCTION()
+	void Attack();
+
+	UFUNCTION()
+	void Interact();
 
 //GetSet接口
 public:
@@ -120,6 +136,9 @@ public:
 	FORCEINLINE void SetIsFalling(bool Value) { IsFalling = Value; }
 	FORCEINLINE bool GetIsFalling() const { return IsFalling; }
 
+	FORCEINLINE void SetIsAttacking(bool Value) { IsAttacking = Value; }
+	FORCEINLINE bool GetIsAttacking() const { return IsAttacking; }
+
 // 变量
 protected:
 	UPROPERTY(BlueprintReadWrite)
@@ -134,6 +153,9 @@ protected:
 	bool IsJumping;
 	UPROPERTY(BlueprintReadWrite)
 	bool IsFalling;
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttacking;
+
 
 // 定时器句柄
 protected:
