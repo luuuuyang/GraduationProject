@@ -2,6 +2,7 @@
 
 
 #include "PickupItem.h"
+#include "Components/EquipmentComponent.h"
 
 // Sets default values
 APickupItem::APickupItem()
@@ -11,6 +12,7 @@ APickupItem::APickupItem()
 
 	PaperFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbook"));
 	PaperFlipbook->SetupAttachment(RootComponent);
+	PaperFlipbook->SetCollisionProfileName(FName("OverlapAllDynamic"));
 
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	Box->SetupAttachment(PaperFlipbook);
@@ -32,6 +34,7 @@ void APickupItem::Tick(float DeltaTime)
 
 void APickupItem::Interact(AActor* Interactor)
 {
+
 	UE_LOG(LogTemp, Warning, TEXT("PickUp"))
 	Destroy();
 }

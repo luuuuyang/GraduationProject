@@ -7,6 +7,7 @@
 #include "Components/PixelCharacterMovemonetComponent.h"
 #include "Components/AttackComponent.h"
 #include "Components/InteractionComponent.h"
+#include "Components/EquipmentComponent.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -56,6 +57,9 @@ class APixelGameCharacter : public APaperCharacter
 
 	UPROPERTY()
 	class UInteractionComponent* InteractionComponent;
+
+	UPROPERTY()
+	class UEquipmentComponent* EquipmentComponent;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enums)
 	AnimationStateEnum AnimationState = AnimationStateEnum::NONE;

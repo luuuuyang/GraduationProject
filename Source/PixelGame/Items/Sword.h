@@ -13,5 +13,7 @@ UCLASS()
 class PIXELGAME_API ASword : public APickupItem
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void Interact(AActor* Interactor) override;
 };

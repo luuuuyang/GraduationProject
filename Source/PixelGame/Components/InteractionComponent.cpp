@@ -5,6 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Interfaces/ItemInteractionInterface.h"
 #include "Items/PickupItem.h"
+#include "Items/Sword.h"
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
@@ -41,7 +42,7 @@ void UInteractionComponent::InteractEvent(TArray<AActor*> OverlappingActors)
 	{
 		if (Actors->GetClass()->ImplementsInterface(UItemInteractionInterface::StaticClass()))
 		{
-			Cast<APickupItem>(Actors)->Interact(GetOwner());
+			Cast<ASword>(Actors)->Interact(GetOwner());
 		}
 	}
 }

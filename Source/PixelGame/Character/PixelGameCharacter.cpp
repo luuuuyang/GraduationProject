@@ -60,6 +60,7 @@ APixelGameCharacter::APixelGameCharacter()
 	PixelCharacterMovemonetComponent = CreateDefaultSubobject<UPixelCharacterMovemonetComponent>(TEXT("PixelCharacterMovement"));
 	AttackComponent = CreateDefaultSubobject<UAttackComponent>(TEXT("AttackComponent"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
+	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,41 +76,41 @@ void APixelGameCharacter::UpdateAnimation()
 		if (IsMoving)
 		{
 			AnimationState = AnimationStateEnum::RUN;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Run"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Run"))
 		}
 		if (IsJumping)
 		{
 			AnimationState = AnimationStateEnum::JUMP;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
 		}
 		if (IsFalling)
 		{
 			AnimationState = AnimationStateEnum::FALL;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 		}
 		break;
 	case AnimationStateEnum::RUN:
 		if (!IsMoving)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
 		if (IsJumping)
 		{
 			AnimationState = AnimationStateEnum::JUMP;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
 		}
 		if (IsFalling)
 		{
 			AnimationState = AnimationStateEnum::FALL;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 		}
 		break;
 	case AnimationStateEnum::JUMP:
 		if (!IsJumping && !IsFalling)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
 		if (IsFalling)
 		{
@@ -123,7 +124,7 @@ void APixelGameCharacter::UpdateAnimation()
 		if (!IsFalling)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
-			UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
+			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
 		break;
 	case AnimationStateEnum::ATTACK:
@@ -142,19 +143,19 @@ void APixelGameCharacter::UpdateAnimation()
 		break;
 	case AnimationStateEnum::IDLE:
 		DesiredAnimation = IdleAnimation;
-		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Idle"))
+		//UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Idle"))
 		break;
 	case AnimationStateEnum::RUN:
 		DesiredAnimation = RunningAnimation;
-		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Running"))
+		//UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Running"))
 		break;
 	case AnimationStateEnum::JUMP:
 		DesiredAnimation = JumpAnimation;
-		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Jumping"))
+		//UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Jumping"))
 		break;
 	case AnimationStateEnum::FALL:
 		DesiredAnimation = FallAnimation;
-		UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Falling"))
+		//UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Falling"))
 		break;
 	case AnimationStateEnum::ATTACK:
 		break;
@@ -248,5 +249,5 @@ void APixelGameCharacter::PlayFallingAnimationDelegate()
 {
 	AnimationState = AnimationStateEnum::FALL;
 	GetWorldTimerManager().ClearTimer(PlayFallingAnimationHandle);
-	UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+	//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 }

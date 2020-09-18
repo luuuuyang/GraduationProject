@@ -2,6 +2,9 @@
 
 
 #include "EquipmentComponent.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Components/Image.h"
+
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -9,6 +12,11 @@ UEquipmentComponent::UEquipmentComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+
+	//static ConstructorHelpers::FClassFinder<UUserWidget> FinderClass(TEXT("WidgetBlueprint'/Game/Blueprints/Widgets/BP_EquipmentWidget.BP_EquipmentWidget_C'"));
+
+	//WidgetClass = FinderClass.Class;
+
 
 	// ...
 }
@@ -18,8 +26,6 @@ UEquipmentComponent::UEquipmentComponent()
 void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 	
 }
 
@@ -31,4 +37,3 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 	// ...
 }
-

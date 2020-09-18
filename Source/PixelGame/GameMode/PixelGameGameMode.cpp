@@ -3,11 +3,14 @@
 #include "PixelGameGameMode.h"
 #include "Character/PixelGameCharacter.h"
 #include "PlayerController/PixelCharacterPlayerController.h"
+#include "HUD/MainHUD.h"
 
 APixelGameGameMode::APixelGameGameMode()
 {
-	//ÉèÖÃÄ¬ÈÏPawnÀà = APixelGameCharacter
+	//ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Pawnï¿½ï¿½ = APixelGameCharacter
 	DefaultPawnClass = APixelGameCharacter::StaticClass();
-	//ÉèÖÃÄ¬ÈÏPlayerControllerÀà = APixelCharacterPlayerController
+	//ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½PlayerControllerï¿½ï¿½ = APixelCharacterPlayerController
 	PlayerControllerClass = APixelCharacterPlayerController::StaticClass();
+
+	HUDClass = AMainHUD::StaticClass();
 }

@@ -4,11 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ItemBase.h"
 #include "Interfaces/ItemInteractionInterface.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSprite.h"
 #include "Components/BoxComponent.h"
 #include "PickupItem.generated.h"
+
+UENUM()
+enum class PickupItemCategory
+{
+	WEAPON UMETA(DisplayName = "Weapon"),
+	ABILITY UMETA(DisplayName = "Ability"),
+	POTION UMETA(DisplayName = "Potion"),
+	LOOT UMETA(DisplayName = "Loot")
+};
+
 
 UCLASS()
 class PIXELGAME_API APickupItem : public AActor, public IItemInteractionInterface
@@ -34,18 +44,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* Box;
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TSubclassOf<AItemBase> Item;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int32 Amount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	bool bCanReplaceFlipbookWithItemFlipbook;
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UPaperSprite* Icon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsOverlapping;
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Amount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	PickupItemCategory Category;
 
 public:
 	virtual void Interact(AActor* Interactor) override;
