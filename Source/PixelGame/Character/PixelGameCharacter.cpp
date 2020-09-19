@@ -185,15 +185,15 @@ void APixelGameCharacter::MoveLeftRight(float Value)
 {
 	if (Value != 0.0f)
 	{
-		SetIsMoving(true);
+		bIsMoving = true;
 		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), Value);
 	}
 	else
 	{
-		SetIsMoving(false);
+		bIsMoving = false;
 	}
 
-	SetCanTurn(true);
+	bCanTurn = true;
 
 	if (bCanTurn)
 	{
@@ -212,31 +212,31 @@ void APixelGameCharacter::MoveUpDown(float Value)
 {
 	if (Value > 0.0f)
 	{
-		SetPressUp(true);
-		SetPressDown(false);
+		bPressUp = true;
+		bPressDown = false;
 	}
 	else if (Value < 0.0f)
 	{
-		SetPressUp(false);
-		SetPressDown(true);
+		bPressUp = false;
+		bPressDown = true;
 	}
 	else
 	{
-		SetPressUp(false);
-		SetPressDown(false);
+		bPressUp = false;
+		bPressDown = false;
 	}
 }
 
 void APixelGameCharacter::BeginJump()
 {
-	if (!CanJump() && GetCharacterMovement()->IsFalling())
+	if (CanJump())
 	{
-		SetIsJumping(false);
+		bIsJumping = true;
+		Jump();
 	}
 	else
 	{
-		SetIsJumping(true);
-		Jump();
+		bIsJumping = false;
 	}
 
 	if (bIsJumping)
@@ -250,9 +250,15 @@ void APixelGameCharacter::EndJump()
 	StopJumping();
 }
 
+void APixelGameCharacter::Landed(const FHitResult& Hit)
+{
+	bIsJumping = false;
+	bIsFalling = false;
+}
+
 void APixelGameCharacter::Attack()
 {
-	SetIsAttacking(true);
+	bIsAttacking = true;
 }
 
 void APixelGameCharacter::Interact()
@@ -277,8 +283,8 @@ void APixelGameCharacter::UpdateCharacter()
 
 void APixelGameCharacter::EndJumpDelegate()
 {
-	SetIsJumping(false);
-	SetIsFalling(true);
+	bIsJumping = false;
+	bIsFalling = true;
 }
 
 void APixelGameCharacter::PlayFallingAnimationDelegate()

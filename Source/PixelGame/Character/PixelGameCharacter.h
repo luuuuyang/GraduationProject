@@ -92,22 +92,18 @@ public:
 
 // 函数接口
 public:
-	UFUNCTION()
 	void MoveLeftRight(float Value);
 
-	UFUNCTION()
 	void MoveUpDown(float Value);
 
-	UFUNCTION()
 	void BeginJump();
 
-	UFUNCTION()
 	void EndJump();
 
-	UFUNCTION()
+	virtual void Landed(const FHitResult& Hit) override;
+
 	void Attack();
 
-	UFUNCTION()
 	void Interact();
 
 //GetSet接口
