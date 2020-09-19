@@ -31,7 +31,7 @@ protected:
 	void OnJump();
 
 	UFUNCTION()
-	void OnStopJump();
+	void OnEndJump();
 
 	UFUNCTION()
 	void OnAttack();

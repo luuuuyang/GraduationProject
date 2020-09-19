@@ -3,6 +3,7 @@
 
 #include "Sword.h"
 #include "HUD/MainHUD.h"
+#include "Character/PixelGameCharacter.h"
 
 void ASword::Interact(AActor* Interactor)
 {

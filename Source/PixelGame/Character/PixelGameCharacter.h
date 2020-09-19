@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
-#include "Components/PixelCharacterMovemonetComponent.h"
 #include "Components/AttackComponent.h"
-#include "Components/InteractionComponent.h"
 #include "Components/EquipmentComponent.h"
+#include "Interfaces/ItemInteractionInterface.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -50,13 +49,7 @@ class APixelGameCharacter : public APaperCharacter
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY()
-	class UPixelCharacterMovemonetComponent* PixelCharacterMovemonetComponent;
-
-	UPROPERTY()
 	class UAttackComponent* AttackComponent;
-
-	UPROPERTY()
-	class UInteractionComponent* InteractionComponent;
 
 	UPROPERTY()
 	class UEquipmentComponent* EquipmentComponent;
@@ -109,7 +102,7 @@ public:
 	void BeginJump();
 
 	UFUNCTION()
-	void StopJump();
+	void EndJump();
 
 	UFUNCTION()
 	void Attack();
@@ -122,43 +115,43 @@ public:
 	FORCEINLINE void SetAnimationState(AnimationStateEnum Value) { AnimationState = Value; }
 	FORCEINLINE AnimationStateEnum GetAnimationState() const { return AnimationState; }
 
-	FORCEINLINE void SetIsMoving(bool Value) { IsMoving = Value; }
-	FORCEINLINE bool GetIsMoving() const { return IsMoving; }
+	FORCEINLINE void SetIsMoving(bool Value) { bIsMoving = Value; }
+	FORCEINLINE bool GetIsMoving() const { return bIsMoving; }
 
-	FORCEINLINE void SetCanTurn(bool Value) { CanTurn = Value; }
-	FORCEINLINE bool GetCanTurn() const { return CanTurn; }
+	FORCEINLINE void SetCanTurn(bool Value) { bCanTurn = Value; }
+	FORCEINLINE bool GetCanTurn() const { return bCanTurn; }
 
-	FORCEINLINE void SetPressUp(bool Value) { PressUp = Value; }
-	FORCEINLINE bool GetPressUp() const { return PressUp; }
+	FORCEINLINE void SetPressUp(bool Value) { bPressUp = Value; }
+	FORCEINLINE bool GetPressUp() const { return bPressUp; }
 
-	FORCEINLINE void SetPressDown(bool Value) { PressDown = Value; }
-	FORCEINLINE bool GetPressDown() const { return PressDown; }
+	FORCEINLINE void SetPressDown(bool Value) { bPressDown = Value; }
+	FORCEINLINE bool GetPressDown() const { return bPressDown; }
 
-	FORCEINLINE void SetIsJumping(bool Value) { IsJumping = Value; }
-	FORCEINLINE bool GetIsJumping() const { return IsJumping; }
+	FORCEINLINE void SetIsJumping(bool Value) { bIsJumping = Value; }
+	FORCEINLINE bool GetIsJumping() const { return bIsJumping; }
 
-	FORCEINLINE void SetIsFalling(bool Value) { IsFalling = Value; }
-	FORCEINLINE bool GetIsFalling() const { return IsFalling; }
+	FORCEINLINE void SetIsFalling(bool Value) { bIsFalling = Value; }
+	FORCEINLINE bool GetIsFalling() const { return bIsFalling; }
 
-	FORCEINLINE void SetIsAttacking(bool Value) { IsAttacking = Value; }
-	FORCEINLINE bool GetIsAttacking() const { return IsAttacking; }
+	FORCEINLINE void SetIsAttacking(bool Value) { bIsAttacking = Value; }
+	FORCEINLINE bool GetIsAttacking() const { return bIsAttacking; }
 
 // 变量
 protected:
 	UPROPERTY(BlueprintReadWrite)
-	bool IsMoving;
+	bool bIsMoving;
 	UPROPERTY(BlueprintReadWrite)
-	bool CanTurn;
+	bool bCanTurn;
 	UPROPERTY(BlueprintReadWrite)
-	bool PressUp;
+	bool bPressUp;
 	UPROPERTY(BlueprintReadWrite)
-	bool PressDown;
+	bool bPressDown;
 	UPROPERTY(BlueprintReadWrite)
-	bool IsJumping;
+	bool bIsJumping;
 	UPROPERTY(BlueprintReadWrite)
-	bool IsFalling;
+	bool bIsFalling;
 	UPROPERTY(BlueprintReadWrite)
-	bool IsAttacking;
+	bool bIsAttacking;
 
 
 // 定时器句柄

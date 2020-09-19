@@ -57,9 +57,7 @@ APixelGameCharacter::APixelGameCharacter()
 	GetSprite()->SetIsReplicated(true);
 	bReplicates = true;
 
-	PixelCharacterMovemonetComponent = CreateDefaultSubobject<UPixelCharacterMovemonetComponent>(TEXT("PixelCharacterMovement"));
 	AttackComponent = CreateDefaultSubobject<UAttackComponent>(TEXT("AttackComponent"));
-	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
 }
 
@@ -73,46 +71,46 @@ void APixelGameCharacter::UpdateAnimation()
 	case AnimationStateEnum::NONE:
 		break;
 	case AnimationStateEnum::IDLE:
-		if (IsMoving)
+		if (bIsMoving)
 		{
 			AnimationState = AnimationStateEnum::RUN;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Run"))
 		}
-		if (IsJumping)
+		if (bIsJumping)
 		{
 			AnimationState = AnimationStateEnum::JUMP;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
 		}
-		if (IsFalling)
+		if (bIsFalling)
 		{
 			AnimationState = AnimationStateEnum::FALL;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 		}
 		break;
 	case AnimationStateEnum::RUN:
-		if (!IsMoving)
+		if (!bIsMoving)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
-		if (IsJumping)
+		if (bIsJumping)
 		{
 			AnimationState = AnimationStateEnum::JUMP;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Jump"))
 		}
-		if (IsFalling)
+		if (bIsFalling)
 		{
 			AnimationState = AnimationStateEnum::FALL;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 		}
 		break;
 	case AnimationStateEnum::JUMP:
-		if (!IsJumping && !IsFalling)
+		if (!bIsJumping && !bIsFalling)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
 		}
-		if (IsFalling)
+		if (bIsFalling)
 		{
 			if (!GetWorldTimerManager().IsTimerActive(PlayFallingAnimationHandle))
 			{
@@ -121,7 +119,7 @@ void APixelGameCharacter::UpdateAnimation()
 		}
 		break;
 	case AnimationStateEnum::FALL:
-		if (!IsFalling)
+		if (!bIsFalling)
 		{
 			AnimationState = AnimationStateEnum::IDLE;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Idle"))
@@ -185,9 +183,19 @@ void APixelGameCharacter::Tick(float DeltaSeconds)
 
 void APixelGameCharacter::MoveLeftRight(float Value)
 {
-	PixelCharacterMovemonetComponent->MoveLeftRight(this, Value);
-	
-	if (CanTurn)
+	if (Value != 0.0f)
+	{
+		SetIsMoving(true);
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), Value);
+	}
+	else
+	{
+		SetIsMoving(false);
+	}
+
+	SetCanTurn(true);
+
+	if (bCanTurn)
 	{
 		if (Value > 0.0f)
 		{
@@ -202,21 +210,43 @@ void APixelGameCharacter::MoveLeftRight(float Value)
 
 void APixelGameCharacter::MoveUpDown(float Value)
 {
-	PixelCharacterMovemonetComponent->MoveUpDown(this, Value);
+	if (Value > 0.0f)
+	{
+		SetPressUp(true);
+		SetPressDown(false);
+	}
+	else if (Value < 0.0f)
+	{
+		SetPressUp(false);
+		SetPressDown(true);
+	}
+	else
+	{
+		SetPressUp(false);
+		SetPressDown(false);
+	}
 }
 
 void APixelGameCharacter::BeginJump()
 {
-	PixelCharacterMovemonetComponent->Jump(this);
-	if (IsJumping)
+	if (!CanJump() && GetCharacterMovement()->IsFalling())
+	{
+		SetIsJumping(false);
+	}
+	else
+	{
+		SetIsJumping(true);
+		Jump();
+	}
+
+	if (bIsJumping)
 	{
 		GetWorldTimerManager().SetTimer(EndJumpTimerHandle, this, &APixelGameCharacter::EndJumpDelegate, 0.1f, false);
 	}
 }
 
-void APixelGameCharacter::StopJump()
+void APixelGameCharacter::EndJump()
 {
-	PixelCharacterMovemonetComponent->StopJump(this);
 	StopJumping();
 }
 
@@ -229,7 +259,13 @@ void APixelGameCharacter::Interact()
 {
 	TArray<AActor*> OverlappingActors;
 	GetOverlappingActors(OverlappingActors);
-	InteractionComponent->InteractEvent(OverlappingActors);
+	for (auto OverlappingActor : OverlappingActors)
+	{
+		if (OverlappingActor->GetClass()->ImplementsInterface(UItemInteractionInterface::StaticClass()))
+		{
+			Cast<IItemInteractionInterface>(OverlappingActor)->Interact(GetOwner());
+		}
+	}
 }
 
 void APixelGameCharacter::UpdateCharacter()
