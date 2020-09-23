@@ -90,6 +90,8 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	FORCEINLINE class UEquipmentComponent* GetEquipmentComponent() const { return EquipmentComponent; }
+
 // 函数接口
 public:
 	void MoveLeftRight(float Value);
@@ -154,8 +156,10 @@ protected:
 protected:
 	FTimerHandle EndJumpTimerHandle;
 	FTimerHandle PlayFallingAnimationHandle;
+	FTimerHandle EndAttackTimerHandle;
 // 定时器委托
 protected:
 	void EndJumpDelegate();
 	void PlayFallingAnimationDelegate();
+	void EndAttackDelegate();
 };

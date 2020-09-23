@@ -7,7 +7,7 @@
 
 void IItemInteractionInterface::Interact(AActor* Interactor)
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("IItemInteractionInterface"))
 }
 
 void IItemInteractionInterface::Overlap(AActor* Actor)

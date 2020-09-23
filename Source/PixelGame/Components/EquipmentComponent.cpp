@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/Image.h"
 
+struct FEquipmentSlot;
 
 // Sets default values for this component's properties
 UEquipmentComponent::UEquipmentComponent()
@@ -13,11 +14,18 @@ UEquipmentComponent::UEquipmentComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	//static ConstructorHelpers::FClassFinder<UUserWidget> FinderClass(TEXT("WidgetBlueprint'/Game/Blueprints/Widgets/BP_EquipmentWidget.BP_EquipmentWidget_C'"));
+	//EquipmentSlots.Init(FEquipmentSlot(), 4);
 
-	//WidgetClass = FinderClass.Class;
+	//A = APickupItem::StaticClass();
 
+	//EquipmentSlot.EquipmentClass = nullptr;
 
+	//EquipmentSlot.EquipmentClass = ASword::StaticClass();
+
+	//if (EquipmentSlot.EquipmentClass)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("EquipmentClass is not null"))
+	//}
 	// ...
 }
 
@@ -27,6 +35,7 @@ void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//A = APickupItem::StaticClass();
 }
 
 
@@ -36,4 +45,23 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UEquipmentComponent::AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemClass, PickupItemCategory Category)
+{
+	
+	EquipmentSlots.Emplace(FEquipmentSlot(PickupItemClass, Category));
+
+	//EquipmentSlots.Add(FEquipmentSlot(/*PickupItemClass, */Category));
+	UE_LOG(LogTemp, Warning, TEXT("Add Equipment Slot Success"))
+}
+
+bool UEquipmentComponent::IsEquipmentSlotEmpty()
+{
+	return false;
+}
+
+void UEquipmentComponent::UseEquipmentSlot(int32 Index)
+{
+
 }

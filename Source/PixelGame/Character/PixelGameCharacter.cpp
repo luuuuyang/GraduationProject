@@ -86,6 +86,10 @@ void APixelGameCharacter::UpdateAnimation()
 			AnimationState = AnimationStateEnum::FALL;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
 		}
+		if (bIsAttacking)
+		{
+			AnimationState = AnimationStateEnum::ATTACK;
+		}
 		break;
 	case AnimationStateEnum::RUN:
 		if (!bIsMoving)
@@ -102,6 +106,10 @@ void APixelGameCharacter::UpdateAnimation()
 		{
 			AnimationState = AnimationStateEnum::FALL;
 			//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+		}
+		if (bIsAttacking)
+		{
+			AnimationState = AnimationStateEnum::ATTACKRUN;
 		}
 		break;
 	case AnimationStateEnum::JUMP:
@@ -126,8 +134,16 @@ void APixelGameCharacter::UpdateAnimation()
 		}
 		break;
 	case AnimationStateEnum::ATTACK:
+		if (!bIsAttacking)
+		{
+			AnimationState = AnimationStateEnum::IDLE;
+		}
 		break;
 	case AnimationStateEnum::ATTACKRUN:
+		if (!bIsAttacking)
+		{
+			AnimationState = AnimationStateEnum::IDLE;
+		}
 		break;
 	default:
 		break;
@@ -156,8 +172,10 @@ void APixelGameCharacter::UpdateAnimation()
 		//UE_LOG(LogTemp, Warning, TEXT("DesiredAnimation set Falling"))
 		break;
 	case AnimationStateEnum::ATTACK:
+		DesiredAnimation = AttackAnimation;
 		break;
 	case AnimationStateEnum::ATTACKRUN:
+		DesiredAnimation = AttackRunAnimation;
 		break;
 	default:
 		break;
@@ -258,7 +276,19 @@ void APixelGameCharacter::Landed(const FHitResult& Hit)
 
 void APixelGameCharacter::Attack()
 {
-	bIsAttacking = true;
+	if (!EquipmentComponent->IsEquipmentSlotEmpty())
+	{
+		if (!bIsAttacking)
+		{
+			bIsAttacking = true;
+			AttackComponent->SetIsAttacking(true);
+			UE_LOG(LogTemp, Warning, TEXT("Attacking"))
+
+
+			GetWorldTimerManager().SetTimer(EndAttackTimerHandle, this, &APixelGameCharacter::EndAttackDelegate, 0.4f, false);
+		}
+	}
+	
 }
 
 void APixelGameCharacter::Interact()
@@ -269,7 +299,7 @@ void APixelGameCharacter::Interact()
 	{
 		if (OverlappingActor->GetClass()->ImplementsInterface(UItemInteractionInterface::StaticClass()))
 		{
-			Cast<IItemInteractionInterface>(OverlappingActor)->Interact(GetOwner());
+			Cast<IItemInteractionInterface>(OverlappingActor)->Interact(this);
 		}
 	}
 }
@@ -292,4 +322,10 @@ void APixelGameCharacter::PlayFallingAnimationDelegate()
 	AnimationState = AnimationStateEnum::FALL;
 	GetWorldTimerManager().ClearTimer(PlayFallingAnimationHandle);
 	//UE_LOG(LogTemp, Warning, TEXT("AniamtionState Set Fall"))
+}
+
+void APixelGameCharacter::EndAttackDelegate()
+{
+	bIsAttacking = false;
+	AttackComponent->SetIsAttacking(false);
 }

@@ -10,9 +10,10 @@
 #include "Components/BoxComponent.h"
 #include "PickupItem.generated.h"
 
-UENUM()
-enum class PickupItemCategory
+UENUM(BlueprintType)
+enum class PickupItemCategory : uint8
 {
+	NONE UMETA(DisplayName = "None"),
 	WEAPON UMETA(DisplayName = "Weapon"),
 	ABILITY UMETA(DisplayName = "Ability"),
 	POTION UMETA(DisplayName = "Potion"),

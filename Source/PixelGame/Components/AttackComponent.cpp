@@ -29,6 +29,9 @@ void UAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (bIsAttacking)
+	{
+
+	}
 }
 

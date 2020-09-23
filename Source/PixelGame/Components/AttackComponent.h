@@ -24,5 +24,22 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+protected:
+	UPROPERTY()
+	bool bIsAttacking;
+
+public:
+	FORCEINLINE void SetIsAttacking(bool Value) { bIsAttacking = Value; }
+	FORCEINLINE bool GetIsAttacking() const { return bIsAttacking; }
+
+protected:
+	UPROPERTY()
+	TArray<FName> SocketName;
+
+	UPROPERTY()
+	TArray<AActor*> ActorsToIgnore;
+
+	UPROPERTY()
+	FVector PreLocation;
 		
 };

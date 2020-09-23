@@ -34,8 +34,7 @@ void APickupItem::Tick(float DeltaTime)
 
 void APickupItem::Interact(AActor* Interactor)
 {
-
-	UE_LOG(LogTemp, Warning, TEXT("PickUp"))
+	UE_LOG(LogTemp, Warning, TEXT("APickupItem"))
 	Destroy();
 }
 

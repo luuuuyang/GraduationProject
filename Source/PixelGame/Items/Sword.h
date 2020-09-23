@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Items/PickupItem.h"
+#include "PaperFlipbookComponent.h"
 #include "Sword.generated.h"
 
 /**
@@ -16,4 +17,26 @@ class PIXELGAME_API ASword : public APickupItem
 
 public:
 	virtual void Interact(AActor* Interactor) override;
+
+protected:
+	UPROPERTY(EditAnywhere)
+	class UPaperFlipbookComponent* Attacker;
+
+	UPROPERTY(EditAnywhere)
+	FName AttackSocket;
+
+	UPROPERTY(EditAnywhere)
+	int32 Damage;
+
+	UPROPERTY(EditAnywhere)
+	float AttackRadius;
+	
+	UPROPERTY(EditAnywhere)
+	float AttackDuration;
+
+	UPROPERTY(EditAnywhere)
+	FVector KnockBack;
+
+public:
+	ASword();
 };
