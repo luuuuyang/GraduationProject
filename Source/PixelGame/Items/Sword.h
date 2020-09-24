@@ -16,8 +16,13 @@ class PIXELGAME_API ASword : public APickupItem
 	GENERATED_BODY()
 
 public:
+	ASword();
+
+public:
 	virtual void Interact(AActor* Interactor) override;
 
+	FORCEINLINE virtual float GetAttackDuration() override { return AttackDuration; }
+	
 protected:
 	UPROPERTY(EditAnywhere)
 	class UPaperFlipbookComponent* Attacker;
@@ -37,6 +42,4 @@ protected:
 	UPROPERTY(EditAnywhere)
 	FVector KnockBack;
 
-public:
-	ASword();
 };

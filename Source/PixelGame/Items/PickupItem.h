@@ -14,9 +14,9 @@ UENUM(BlueprintType)
 enum class PickupItemCategory : uint8
 {
 	NONE UMETA(DisplayName = "None"),
+	POTION UMETA(DisplayName = "Potion"),
 	WEAPON UMETA(DisplayName = "Weapon"),
 	ABILITY UMETA(DisplayName = "Ability"),
-	POTION UMETA(DisplayName = "Potion"),
 	LOOT UMETA(DisplayName = "Loot")
 };
 
@@ -63,4 +63,7 @@ protected:
 
 public:
 	virtual void Interact(AActor* Interactor) override;
+
+	//可改pure virtual function
+	virtual float GetAttackDuration();
 };

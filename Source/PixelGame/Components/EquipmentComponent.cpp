@@ -14,19 +14,6 @@ UEquipmentComponent::UEquipmentComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	//EquipmentSlots.Init(FEquipmentSlot(), 4);
-
-	//A = APickupItem::StaticClass();
-
-	//EquipmentSlot.EquipmentClass = nullptr;
-
-	//EquipmentSlot.EquipmentClass = ASword::StaticClass();
-
-	//if (EquipmentSlot.EquipmentClass)
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("EquipmentClass is not null"))
-	//}
-	// ...
 }
 
 
@@ -35,7 +22,6 @@ void UEquipmentComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//A = APickupItem::StaticClass();
 }
 
 
@@ -49,19 +35,55 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UEquipmentComponent::AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemClass, PickupItemCategory Category)
 {
+	switch (Category)
+	{
+	case PickupItemCategory::NONE:
+		break;
+	case PickupItemCategory::POTION:
+		PotionSlots.Emplace(PickupItemClass);
+		break;
+	case PickupItemCategory::WEAPON:
+		WeaponSlots.Emplace(PickupItemClass);
+		//Cast<APickupItem>(WeaponSlots[0].GetDefaultObject())->Test();
+		UE_LOG(LogTemp, Warning, TEXT("%d"), WeaponSlots.Num())
+		break;
+	case PickupItemCategory::ABILITY:
+		AbilitySlots.Emplace(PickupItemClass);
+		break;
+	case PickupItemCategory::LOOT:
+		break;
+	default:
+		break;
+	}
 	
-	EquipmentSlots.Emplace(FEquipmentSlot(PickupItemClass, Category));
-
-	//EquipmentSlots.Add(FEquipmentSlot(/*PickupItemClass, */Category));
-	UE_LOG(LogTemp, Warning, TEXT("Add Equipment Slot Success"))
+	
 }
 
-bool UEquipmentComponent::IsEquipmentSlotEmpty()
+void UEquipmentComponent::SwapEquipmentSlot()
 {
-	return false;
+}
+
+bool UEquipmentComponent::IsPotionSlotValid(int32 Index)
+{
+	return PotionSlots.IsValidIndex(Index);
+}
+
+bool UEquipmentComponent::IsWeaponSlotValid(int32 Index)
+{
+	return WeaponSlots.IsValidIndex(Index);
+}
+
+bool UEquipmentComponent::IsAbilitySlotValid(int32 Index)
+{
+	return AbilitySlots.IsValidIndex(Index);
 }
 
 void UEquipmentComponent::UseEquipmentSlot(int32 Index)
 {
 
+}
+
+float UEquipmentComponent::GetWeaponAttackDuration(int32 Index)
+{
+	return Cast<APickupItem>(WeaponSlots[Index].GetDefaultObject())->GetAttackDuration();
 }

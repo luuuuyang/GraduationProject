@@ -38,3 +38,8 @@ void APickupItem::Interact(AActor* Interactor)
 	Destroy();
 }
 
+float APickupItem::GetAttackDuration()
+{
+	return 0.0f;
+} 
+

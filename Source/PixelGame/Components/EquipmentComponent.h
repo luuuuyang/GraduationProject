@@ -40,7 +40,7 @@ class PIXELGAME_API UEquipmentComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UEquipmentComponent();
 
@@ -48,31 +48,44 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
-	//UPROPERTY()
-	//FEquipmentSlot EquipmentSlot;
+	UPROPERTY()
+		TArray<TSubclassOf<APickupItem>> PotionSlots;
 
 	UPROPERTY()
-	TArray<FEquipmentSlot> EquipmentSlots;
-	
+		TArray<TSubclassOf<APickupItem>> WeaponSlots;
+
+	UPROPERTY()
+		TArray<TSubclassOf<APickupItem>> AbilitySlots;
+
+private:
+
 public:
 
 	//根据拾起物品的类别分别放在不同的插槽中
 	UFUNCTION()
 	void AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemClass, PickupItemCategory Category);
 
-	//UFUNCTION()
-	//void SwapEquipmentSlot();
+	UFUNCTION()
+	void SwapEquipmentSlot();
 
 	UFUNCTION()
-	bool IsEquipmentSlotEmpty();
+	bool IsPotionSlotValid(int32 Index);
+
+	UFUNCTION()
+	bool IsWeaponSlotValid(int32 Index);
+
+	UFUNCTION()
+	bool IsAbilitySlotValid(int32 Index);
 
 	UFUNCTION()
 	void UseEquipmentSlot(int32 Index);
 
-public:
+	UFUNCTION()
+	float GetWeaponAttackDuration(int32 Index);
+
 };

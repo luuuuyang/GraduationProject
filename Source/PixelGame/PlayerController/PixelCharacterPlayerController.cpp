@@ -22,7 +22,8 @@ void APixelCharacterPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", IE_Pressed, this, &APixelCharacterPlayerController::OnJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &APixelCharacterPlayerController::OnEndJump);
 
-	InputComponent->BindAction("Attack", IE_Pressed, this, &APixelCharacterPlayerController::OnAttack);
+	InputComponent->BindAction("Attack_1", IE_Pressed, this, &APixelCharacterPlayerController::OnAttack_1);
+	InputComponent->BindAction("Attack_2", IE_Pressed, this, &APixelCharacterPlayerController::OnAttack_2);
 
 	InputComponent->BindAction("Interact", IE_Pressed, this, &APixelCharacterPlayerController::OnInteract);
 }
@@ -48,9 +49,14 @@ void APixelCharacterPlayerController::OnEndJump()
 	PixelCharacter->EndJump();
 }
 
-void APixelCharacterPlayerController::OnAttack()
+void APixelCharacterPlayerController::OnAttack_1()
 {
-	PixelCharacter->Attack();
+	PixelCharacter->Attack_1();
+}
+
+void APixelCharacterPlayerController::OnAttack_2()
+{
+	PixelCharacter->Attack_2();
 }
 
 void APixelCharacterPlayerController::OnInteract()

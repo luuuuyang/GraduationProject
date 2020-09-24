@@ -34,7 +34,10 @@ protected:
 	void OnEndJump();
 
 	UFUNCTION()
-	void OnAttack();
+	void OnAttack_1();
+
+	UFUNCTION()
+	void OnAttack_2();
 
 	UFUNCTION()
 	void OnInteract();

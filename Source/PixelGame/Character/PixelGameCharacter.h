@@ -104,7 +104,9 @@ public:
 
 	virtual void Landed(const FHitResult& Hit) override;
 
-	void Attack();
+	void Attack_1();
+
+	void Attack_2();
 
 	void Interact();
 

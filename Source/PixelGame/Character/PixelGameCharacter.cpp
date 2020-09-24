@@ -274,9 +274,9 @@ void APixelGameCharacter::Landed(const FHitResult& Hit)
 	bIsFalling = false;
 }
 
-void APixelGameCharacter::Attack()
+void APixelGameCharacter::Attack_1()
 {
-	if (!EquipmentComponent->IsEquipmentSlotEmpty())
+	if (EquipmentComponent->IsWeaponSlotValid(0))
 	{
 		if (!bIsAttacking)
 		{
@@ -284,11 +284,30 @@ void APixelGameCharacter::Attack()
 			AttackComponent->SetIsAttacking(true);
 			UE_LOG(LogTemp, Warning, TEXT("Attacking"))
 
-
-			GetWorldTimerManager().SetTimer(EndAttackTimerHandle, this, &APixelGameCharacter::EndAttackDelegate, 0.4f, false);
+			float AttackDuration = EquipmentComponent->GetWeaponAttackDuration(0);
+			UE_LOG(LogTemp, Warning, TEXT("%f"), AttackDuration)
+																			//攻击时间参数可通过拾起的装备获得
+			GetWorldTimerManager().SetTimer(EndAttackTimerHandle, this, &APixelGameCharacter::EndAttackDelegate, AttackDuration, false);
 		}
 	}
 	
+}
+
+void APixelGameCharacter::Attack_2()
+{
+	if (EquipmentComponent->IsWeaponSlotValid(1))
+	{
+		if (!bIsAttacking)
+		{
+			bIsAttacking = true;
+			AttackComponent->SetIsAttacking(true);
+			UE_LOG(LogTemp, Warning, TEXT("Attacking"))
+
+																								//攻击时间参数可通过拾起的装备获得
+			GetWorldTimerManager().SetTimer(EndAttackTimerHandle, this, &APixelGameCharacter::EndAttackDelegate, 0.4f, false);
+		}
+	}
+
 }
 
 void APixelGameCharacter::Interact()
@@ -300,6 +319,7 @@ void APixelGameCharacter::Interact()
 		if (OverlappingActor->GetClass()->ImplementsInterface(UItemInteractionInterface::StaticClass()))
 		{
 			Cast<IItemInteractionInterface>(OverlappingActor)->Interact(this);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *GetOwner()->GetName())
 		}
 	}
 }
