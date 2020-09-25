@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/AttackComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Items/PickupItem.h"
 #include "Items/Sword.h"
@@ -53,14 +54,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
-	UPROPERTY()
-		TArray<TSubclassOf<APickupItem>> PotionSlots;
+	//UPROPERTY()
+	//TArray<TSubclassOf<APickupItem>> PotionSlots;
 
 	UPROPERTY()
-		TArray<TSubclassOf<APickupItem>> WeaponSlots;
+	TArray<FEquipmentSlot> WeaponSlots;
 
-	UPROPERTY()
-		TArray<TSubclassOf<APickupItem>> AbilitySlots;
+	//UPROPERTY()
+	//TArray<TSubclassOf<APickupItem>> AbilitySlots;
 
 private:
 
@@ -70,22 +71,31 @@ public:
 	UFUNCTION()
 	void AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemClass, PickupItemCategory Category);
 
+	//UFUNCTION()
+	//void UpdateMeleeWeaponAttribute();
+
 	UFUNCTION()
 	void SwapEquipmentSlot();
 
-	UFUNCTION()
-	bool IsPotionSlotValid(int32 Index);
+	//UFUNCTION()
+	//bool IsPotionSlotValid(int32 Index);
 
 	UFUNCTION()
 	bool IsWeaponSlotValid(int32 Index);
 
-	UFUNCTION()
-	bool IsAbilitySlotValid(int32 Index);
+	//UFUNCTION()
+	//bool IsAbilitySlotValid(int32 Index);
 
 	UFUNCTION()
 	void UseEquipmentSlot(int32 Index);
 
 	UFUNCTION()
 	float GetWeaponAttackDuration(int32 Index);
+
+	UFUNCTION()
+	TSubclassOf<APickupItem> GetWeaponClass(int32 Index);
+
+	UFUNCTION()
+	PickupItemCategory GetWeaponCategory(int32 Index);
 
 };

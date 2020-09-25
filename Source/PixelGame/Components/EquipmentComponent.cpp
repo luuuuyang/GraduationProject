@@ -35,17 +35,18 @@ void UEquipmentComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UEquipmentComponent::AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemClass, PickupItemCategory Category)
 {
-	switch (Category)
+	/*switch (Category)
 	{
 	case PickupItemCategory::NONE:
 		break;
 	case PickupItemCategory::POTION:
 		PotionSlots.Emplace(PickupItemClass);
 		break;
-	case PickupItemCategory::WEAPON:
+	case PickupItemCategory::MELEEWEAPON:
 		WeaponSlots.Emplace(PickupItemClass);
-		//Cast<APickupItem>(WeaponSlots[0].GetDefaultObject())->Test();
-		UE_LOG(LogTemp, Warning, TEXT("%d"), WeaponSlots.Num())
+		break;
+	case PickupItemCategory::MELEEWEAPON:
+		WeaponSlots.Emplace(PickupItemClass);
 		break;
 	case PickupItemCategory::ABILITY:
 		AbilitySlots.Emplace(PickupItemClass);
@@ -54,7 +55,9 @@ void UEquipmentComponent::AddEquipmentSlot(TSubclassOf<APickupItem> PickupItemCl
 		break;
 	default:
 		break;
-	}
+	}*/
+
+	WeaponSlots.Emplace(FEquipmentSlot(PickupItemClass, Category));
 	
 	
 }
@@ -63,20 +66,20 @@ void UEquipmentComponent::SwapEquipmentSlot()
 {
 }
 
-bool UEquipmentComponent::IsPotionSlotValid(int32 Index)
+/*bool UEquipmentComponent::IsPotionSlotValid(int32 Index)
 {
 	return PotionSlots.IsValidIndex(Index);
-}
+}*/
 
 bool UEquipmentComponent::IsWeaponSlotValid(int32 Index)
 {
 	return WeaponSlots.IsValidIndex(Index);
 }
 
-bool UEquipmentComponent::IsAbilitySlotValid(int32 Index)
+/*bool UEquipmentComponent::IsAbilitySlotValid(int32 Index)
 {
 	return AbilitySlots.IsValidIndex(Index);
-}
+}*/
 
 void UEquipmentComponent::UseEquipmentSlot(int32 Index)
 {
@@ -85,5 +88,15 @@ void UEquipmentComponent::UseEquipmentSlot(int32 Index)
 
 float UEquipmentComponent::GetWeaponAttackDuration(int32 Index)
 {
-	return Cast<APickupItem>(WeaponSlots[Index].GetDefaultObject())->GetAttackDuration();
+	return Cast<APickupItem>(WeaponSlots[Index].EquipmentClass.GetDefaultObject())->GetAttackDuration();
+}
+
+TSubclassOf<APickupItem> UEquipmentComponent::GetWeaponClass(int32 Index)
+{
+	return WeaponSlots[Index].EquipmentClass;
+}
+
+PickupItemCategory UEquipmentComponent::GetWeaponCategory(int32 Index)
+{
+	return WeaponSlots[Index].EquipmentCategory;
 }

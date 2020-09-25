@@ -92,6 +92,8 @@ public:
 
 	FORCEINLINE class UEquipmentComponent* GetEquipmentComponent() const { return EquipmentComponent; }
 
+	FORCEINLINE class UAttackComponent* GetAttackComponent() const { return AttackComponent; }
+
 // 函数接口
 public:
 	void MoveLeftRight(float Value);

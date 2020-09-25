@@ -2,6 +2,11 @@
 
 
 #include "AttackComponent.h"
+#include "Character/PixelGameCharacter.h"
+#include "Items/PickupItem.h"
+#include "Engine/EngineTypes.h"
+#include "DrawDebugHelpers.h"
+
 
 // Sets default values for this component's properties
 UAttackComponent::UAttackComponent()
@@ -31,7 +36,56 @@ void UAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	if (bIsAttacking)
 	{
+		UPaperFlipbookComponent* Character = Cast<APixelGameCharacter>(GetOwner())->GetSprite();
 
+		HitSocketName = Character->GetAllSocketNames();
+		
+		
+		if (DoOnce)
+		{
+			StartLocation = Character->GetSocketLocation(FName("Self"));
+			ActorsToIgnore.Empty();
+			DoOnce = false;
+		}
+
+		TArray<FHitResult> HitResults;
+		
+		for (auto SocketName : HitSocketName)
+		{
+			EndLocation = Character->GetSocketLocation(SocketName);
+
+																//Warning 直接访问数组内存
+			FCollisionShape CollisionShape = FCollisionShape::MakeSphere(MeleeWeapon[0].AttackRadius);
+
+			FCollisionQueryParams CollisionQueryParams;
+			CollisionQueryParams.AddIgnoredActors(ActorsToIgnore);
+
+			if (GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECollisionChannel::ECC_Camera, CollisionShape, CollisionQueryParams))
+			{
+				for (auto Hit : HitResults)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Hit Success, %s"), *Hit.Actor->GetName())
+				}
+			}
+
+			
+			
+			StartLocation = EndLocation;
+
+			for (auto Hit : HitResults)
+			{
+				ActorsToIgnore.AddUnique(Hit.Actor.Get());
+			}
+		}
+
+	}
+	else
+	{
+		DoOnce = true;
 	}
 }
 
+void UAttackComponent::SetMeleeWeaponProperty(FMeleeWeaponProperty MeleeWeaponProperty)
+{
+	MeleeWeapon.Emplace(MeleeWeaponProperty);
+}

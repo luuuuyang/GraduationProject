@@ -280,8 +280,20 @@ void APixelGameCharacter::Attack_1()
 	{
 		if (!bIsAttacking)
 		{
+			PickupItemCategory WeaponCategory = EquipmentComponent->GetWeaponCategory(0);
+			switch (WeaponCategory)
+			{
+			case PickupItemCategory::MELEEWEAPON:
+				UE_LOG(LogTemp, Warning, TEXT("MeleeWeapon"))
+				AttackComponent->SetIsAttacking(true);
+				break;
+			case PickupItemCategory::RANGEDWEAPON:
+				break;
+			default:
+				break;
+			}
 			bIsAttacking = true;
-			AttackComponent->SetIsAttacking(true);
+			
 			UE_LOG(LogTemp, Warning, TEXT("Attacking"))
 
 			float AttackDuration = EquipmentComponent->GetWeaponAttackDuration(0);

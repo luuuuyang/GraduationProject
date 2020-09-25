@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Items/Sword.h"
 #include "AttackComponent.generated.h"
 
 
@@ -24,22 +25,34 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-protected:
-	UPROPERTY()
-	bool bIsAttacking;
-
 public:
 	FORCEINLINE void SetIsAttacking(bool Value) { bIsAttacking = Value; }
 	FORCEINLINE bool GetIsAttacking() const { return bIsAttacking; }
 
 protected:
 	UPROPERTY()
-	TArray<FName> SocketName;
+	bool bIsAttacking;
+
+protected:
+	UPROPERTY()
+	TArray<FMeleeWeaponProperty> MeleeWeapon;
+
+	UPROPERTY()
+	TArray<FName> HitSocketName;
 
 	UPROPERTY()
 	TArray<AActor*> ActorsToIgnore;
 
 	UPROPERTY()
-	FVector PreLocation;
+	FVector StartLocation;
+
+	UPROPERTY()
+	FVector EndLocation;
+
+	UPROPERTY()
+	bool DoOnce = true;
+public:
+	UFUNCTION()
+	void SetMeleeWeaponProperty(FMeleeWeaponProperty MeleeWeaponProperty);
 		
 };

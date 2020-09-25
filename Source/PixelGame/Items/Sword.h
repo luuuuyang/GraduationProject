@@ -4,12 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "Items/PickupItem.h"
-#include "PaperFlipbookComponent.h"
 #include "Sword.generated.h"
 
-/**
- * 
- */
+USTRUCT()
+struct FMeleeWeaponProperty
+{
+	GENERATED_BODY()
+
+		UPROPERTY()
+		FName AttackSocket;
+
+	UPROPERTY()
+		int32 Damage;
+
+	UPROPERTY()
+		float AttackRadius;
+
+	UPROPERTY()
+		float AttackDuration;
+
+	UPROPERTY()
+		FVector KnockBackForce;
+};
+
+
 UCLASS()
 class PIXELGAME_API ASword : public APickupItem
 {
@@ -21,25 +39,11 @@ public:
 public:
 	virtual void Interact(AActor* Interactor) override;
 
-	FORCEINLINE virtual float GetAttackDuration() override { return AttackDuration; }
+public:
+	FORCEINLINE virtual float GetAttackDuration() override { return WeaponProperty.AttackDuration; }
 	
 protected:
-	UPROPERTY(EditAnywhere)
-	class UPaperFlipbookComponent* Attacker;
-
-	UPROPERTY(EditAnywhere)
-	FName AttackSocket;
-
-	UPROPERTY(EditAnywhere)
-	int32 Damage;
-
-	UPROPERTY(EditAnywhere)
-	float AttackRadius;
-	
-	UPROPERTY(EditAnywhere)
-	float AttackDuration;
-
-	UPROPERTY(EditAnywhere)
-	FVector KnockBack;
+	UPROPERTY()
+	FMeleeWeaponProperty WeaponProperty;
 
 };

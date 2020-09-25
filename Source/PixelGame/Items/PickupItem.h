@@ -13,12 +13,15 @@
 UENUM(BlueprintType)
 enum class PickupItemCategory : uint8
 {
-	NONE UMETA(DisplayName = "None"),
-	POTION UMETA(DisplayName = "Potion"),
-	WEAPON UMETA(DisplayName = "Weapon"),
-	ABILITY UMETA(DisplayName = "Ability"),
-	LOOT UMETA(DisplayName = "Loot")
+	NONE         UMETA(DisplayName = "None"),
+	POTION       UMETA(DisplayName = "Potion"),
+	MELEEWEAPON  UMETA(DisplayName = "MeleeWeapon"),
+	RANGEDWEAPON UMETA(DisplayName = "RangedWeapon"),
+	ABILITY      UMETA(DisplayName = "Ability"),
+	LOOT         UMETA(DisplayName = "Loot")
 };
+
+
 
 
 UCLASS()
