@@ -6,6 +6,7 @@
 #include "PaperCharacter.h"
 #include "Components/AttackComponent.h"
 #include "Components/EquipmentComponent.h"
+#include "Components/HealthComponent.h"
 #include "Interfaces/ItemInteractionInterface.h"
 #include "PixelGameCharacter.generated.h"
 
@@ -53,6 +54,9 @@ class APixelGameCharacter : public APaperCharacter
 
 	UPROPERTY()
 	class UEquipmentComponent* EquipmentComponent;
+
+	UPROPERTY()
+	class UHealthComponent* HealthComponent;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enums)
 	AnimationStateEnum AnimationState = AnimationStateEnum::NONE;
@@ -93,6 +97,8 @@ public:
 	FORCEINLINE class UEquipmentComponent* GetEquipmentComponent() const { return EquipmentComponent; }
 
 	FORCEINLINE class UAttackComponent* GetAttackComponent() const { return AttackComponent; }
+
+	FORCEINLINE class UHealthComponent* GetHealthComponent() const { return HealthComponent; }
 
 // 函数接口
 public:

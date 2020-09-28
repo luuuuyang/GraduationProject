@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Widgets/HealthWidget.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnHealthChanged, float)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PIXELGAME_API UHealthComponent : public UActorComponent
@@ -24,5 +26,36 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+public:
+	class UHealthWidget* HealthWidget;
+
+	FOnHealthChanged OnHealthChanged;
+
+public:
+	UFUNCTION()
+	void IncreaseCurrentHealth(int32 IncreaseValue);
+
+	UFUNCTION()
+	void DecreaseCurrentHealth(int32 DecreaseValue);
+
+	UFUNCTION()
+	void IncreaseMaxHealth(int32 IncreaseValue);
+
+	UFUNCTION()
+	void DecreaseMaxHealth(int32 DecreaseValue);
+
+public:
+	FORCEINLINE void SetCurrentHealth(int32 Value) { CurrentHealth = Value; }
+	FORCEINLINE int32 GetCurrentHealth() const { return CurrentHealth; }
+
+	FORCEINLINE void SetMaxHealth(int32 Value) { MaxHealth = Value; }
+	FORCEINLINE int32 GetMaxHealth() const { return MaxHealth; }
+
+private:
+	UPROPERTY()
+	int32 CurrentHealth;
+
+	UPROPERTY()
+	int32 MaxHealth;
+
 };

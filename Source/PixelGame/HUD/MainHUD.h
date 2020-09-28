@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "Widgets/EquipmentWidget.h"
+#include "Widgets/HealthWidget.h"
 #include "MainHUD.generated.h"
 
 /**
@@ -20,9 +21,15 @@ protected:
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UEquipmentWidget> WidgetClass;
+	TSubclassOf<UEquipmentWidget> EquipmentWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UHealthWidget> HealthWidgetClass;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY()
 	class UEquipmentWidget* EquipmentWidget;
+
+	UPROPERTY()
+	class UHealthWidget* HealthWidget;
 };
