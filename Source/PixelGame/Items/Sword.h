@@ -11,20 +11,20 @@ struct FMeleeWeaponProperty
 {
 	GENERATED_BODY()
 
-		UPROPERTY()
-		FName AttackSocket;
+	UPROPERTY()
+	FName AttackSocket;
 
 	UPROPERTY()
-		int32 Damage;
+	int32 Damage;
 
 	UPROPERTY()
-		float AttackRadius;
+	float AttackRadius;
 
 	UPROPERTY()
-		float AttackDuration;
+	float AttackDuration;
 
 	UPROPERTY()
-		FVector KnockBackForce;
+	FVector KnockBackForce;
 };
 
 

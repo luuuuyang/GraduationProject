@@ -2,8 +2,6 @@
 
 
 #include "HealthComponent.h"
-#include "HUD/MainHUD.h"
-#include "Widgets/HealthWidget.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -14,6 +12,7 @@ UHealthComponent::UHealthComponent()
 
 	CurrentHealth = 100;
 	MaxHealth = 100;
+	CalculateHealthPercent();
 }
 
 
@@ -30,7 +29,7 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	DecreaseCurrentHealth(1);
+	//DecreaseCurrentHealth(1);
 }
 
 void UHealthComponent::IncreaseCurrentHealth(int32 IncreaseValue)
@@ -43,13 +42,13 @@ void UHealthComponent::DecreaseCurrentHealth(int32 DecreaseValue)
 	CurrentHealth -= DecreaseValue;
 	if (OnHealthChanged.IsBound())
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("bind success"))
-
-		OnHealthChanged.Execute(float(CurrentHealth) / float(MaxHealth));
+		CalculateHealthPercent();
+		OnHealthChanged.Execute(HealthPercent);
+		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged"))
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("bind fail"))
+		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged Empty"))
 	}
 }
 

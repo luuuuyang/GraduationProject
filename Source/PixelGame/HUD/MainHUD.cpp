@@ -13,38 +13,40 @@ void AMainHUD::BeginPlay()
 		EquipmentWidget = CreateWidget<UEquipmentWidget>(GetWorld()->GetFirstPlayerController(), EquipmentWidgetClass);
 		if (EquipmentWidget)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("EquipmentWidget Create Success"))
 			EquipmentWidget->AddToViewport();
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Widget failure"))
+			UE_LOG(LogTemp, Warning, TEXT("EquipmentWidget Create Failure"))
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Class failure"))
+		UE_LOG(LogTemp, Warning, TEXT("EquipmentWidgetClass Empty"))
 	}
 
 	if (HealthWidgetClass)
 	{
 		HealthWidget = CreateWidget<UHealthWidget>(GetWorld()->GetFirstPlayerController(), HealthWidgetClass);
-		UE_LOG(LogTemp, Warning, TEXT("HealthWidget"))
 		if (HealthWidget)
 		{
-			int32 CurrentHealth = Cast<APixelGameCharacter>(GetOwningPawn())->GetHealthComponent()->GetCurrentHealth();
-			int32 MaxHealth = Cast<APixelGameCharacter>(GetOwningPawn())->GetHealthComponent()->GetMaxHealth();
-			Cast<APixelGameCharacter>(GetOwningPawn())->GetHealthComponent()->OnHealthChanged.BindUFunction(HealthWidget, "UpdatePercent", 0.5f);
-			HealthWidget->HealthBar->SetPercent(CurrentHealth / MaxHealth);
+			APixelGameCharacter* MyCharacter = Cast<APixelGameCharacter>(GetOwningPawn());
+
+			MyCharacter->GetHealthComponent()->OnHealthChanged.BindUFunction(HealthWidget, "UpdatePercent");
+
+			float HealthPercent = MyCharacter->GetHealthComponent()->GetHealthPercent();
+			HealthWidget->HealthBar->SetPercent(HealthPercent);
+
 			HealthWidget->AddToViewport();
-			
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Widget failure"))
+			UE_LOG(LogTemp, Warning, TEXT("HealthWidget Create Failure"))
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Class failure"))
+		UE_LOG(LogTemp, Warning, TEXT("HealthWidgetClass Empty"))
 	}
 }

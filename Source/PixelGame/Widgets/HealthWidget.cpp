@@ -2,7 +2,6 @@
 
 
 #include "HealthWidget.h"
-#include "Character/PixelGameCharacter.h"
 
 void UHealthWidget::UpdatePercent(float CurrentPercent)
 {

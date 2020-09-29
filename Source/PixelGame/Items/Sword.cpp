@@ -4,8 +4,6 @@
 #include "Sword.h"
 #include "HUD/MainHUD.h"
 #include "Character/PixelGameCharacter.h"
-#include "Components/EquipmentComponent.h"
-#include "Components/AttackComponent.h"
 
 ASword::ASword()
 {

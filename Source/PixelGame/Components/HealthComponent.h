@@ -27,8 +27,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	class UHealthWidget* HealthWidget;
-
 	FOnHealthChanged OnHealthChanged;
 
 public:
@@ -44,6 +42,9 @@ public:
 	UFUNCTION()
 	void DecreaseMaxHealth(int32 DecreaseValue);
 
+private:
+	FORCEINLINE void CalculateHealthPercent() { HealthPercent = float(CurrentHealth) / float(MaxHealth); }
+
 public:
 	FORCEINLINE void SetCurrentHealth(int32 Value) { CurrentHealth = Value; }
 	FORCEINLINE int32 GetCurrentHealth() const { return CurrentHealth; }
@@ -51,11 +52,18 @@ public:
 	FORCEINLINE void SetMaxHealth(int32 Value) { MaxHealth = Value; }
 	FORCEINLINE int32 GetMaxHealth() const { return MaxHealth; }
 
+	FORCEINLINE float GetHealthPercent() const { return HealthPercent; }
+
 private:
+	UPROPERTY()
+	class UHealthWidget* HealthWidget;
+
 	UPROPERTY()
 	int32 CurrentHealth;
 
 	UPROPERTY()
 	int32 MaxHealth;
 
+	UPROPERTY()
+	float HealthPercent;
 };

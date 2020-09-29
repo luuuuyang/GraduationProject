@@ -20,10 +20,10 @@ protected:
 	virtual void BeginPlay() override;
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<UEquipmentWidget> EquipmentWidgetClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<UHealthWidget> HealthWidgetClass;
 
 public:

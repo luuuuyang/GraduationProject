@@ -6,7 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "Components/HealthComponent.h"
 #include "HealthWidget.generated.h"
 
 /**
@@ -28,11 +27,4 @@ public:
 public:
 	UFUNCTION()
 	void UpdatePercent(float CurrentPercent);
-
-private:
-	UPROPERTY()
-	int32 CurrentHealth;
-
-	UPROPERTY()
-	int32 MaxHealth;	
 };
