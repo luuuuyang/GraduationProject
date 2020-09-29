@@ -24,7 +24,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* HealthText;
 
+private:
+	FORCEINLINE void UpdatePercent(float CurrentPercent) { HealthBar->SetPercent(CurrentPercent); }
+	FORCEINLINE void UpdateText(FText CurrentText) { HealthText->SetText(CurrentText); }
+
 public:
 	UFUNCTION()
-	void UpdatePercent(float CurrentPercent);
+	void UpdateWidget(float CurrentPercent, FText CurrentText);
 };

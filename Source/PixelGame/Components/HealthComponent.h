@@ -7,7 +7,7 @@
 #include "Widgets/HealthWidget.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DELEGATE_OneParam(FOnHealthChanged, float)
+DECLARE_DELEGATE_TwoParams(FOnHealthChanged, float, FText)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PIXELGAME_API UHealthComponent : public UActorComponent

@@ -33,10 +33,16 @@ void AMainHUD::BeginPlay()
 		{
 			APixelGameCharacter* MyCharacter = Cast<APixelGameCharacter>(GetOwningPawn());
 
-			MyCharacter->GetHealthComponent()->OnHealthChanged.BindUFunction(HealthWidget, "UpdatePercent");
+			MyCharacter->GetHealthComponent()->OnHealthChanged.BindUFunction(HealthWidget, "UpdateWidget");
+
 
 			float HealthPercent = MyCharacter->GetHealthComponent()->GetHealthPercent();
 			HealthWidget->HealthBar->SetPercent(HealthPercent);
+
+			int32 CurrentHealth = MyCharacter->GetHealthComponent()->GetCurrentHealth();
+			int32 MaxHealth = MyCharacter->GetHealthComponent()->GetMaxHealth();
+			FString FormatHealthText = FString::FromInt(CurrentHealth) + FString(" / ") + FString::FromInt(MaxHealth);
+			HealthWidget->HealthText->SetText(FText::FromString(FormatHealthText));
 
 			HealthWidget->AddToViewport();
 		}

@@ -3,7 +3,8 @@
 
 #include "HealthWidget.h"
 
-void UHealthWidget::UpdatePercent(float CurrentPercent)
+void UHealthWidget::UpdateWidget(float CurrentPercent, FText CurrentText)
 {
-	HealthBar->SetPercent(CurrentPercent);
+	UpdatePercent(CurrentPercent);
+	UpdateText(CurrentText);
 }

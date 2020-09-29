@@ -43,7 +43,9 @@ void UHealthComponent::DecreaseCurrentHealth(int32 DecreaseValue)
 	if (OnHealthChanged.IsBound())
 	{
 		CalculateHealthPercent();
-		OnHealthChanged.Execute(HealthPercent);
+		FString HealthString = FString::FromInt(CurrentHealth) + FString(" / ") + FString::FromInt(MaxHealth);
+		FText HealthText = FText::FromString(HealthString);
+		OnHealthChanged.Execute(HealthPercent, HealthText);
 		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged"))
 	}
 	else
