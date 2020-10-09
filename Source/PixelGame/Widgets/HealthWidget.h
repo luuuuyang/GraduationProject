@@ -21,14 +21,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidgetOptional))
 	class UTextBlock* HealthText;
 
 private:
-	FORCEINLINE void UpdatePercent(float CurrentPercent) { HealthBar->SetPercent(CurrentPercent); }
-	FORCEINLINE void UpdateText(FText CurrentText) { HealthText->SetText(CurrentText); }
+	UPROPERTY()
+	int32 CurrentHealth;
+
+	UPROPERTY()
+	int32 MaxHealth;
+
+	UPROPERTY()
+	float HealthPercent;
+
+	UPROPERTY()
+	FText HealthPercentText;
 
 public:
 	UFUNCTION()
-	void UpdateWidget(float CurrentPercent, FText CurrentText);
+	void InitializeHealthWidget(int32 InitCurrentHealth, int32 InitMaxHealth);
+
+	UFUNCTION()
+	void OnCurrentHealthChanged(int32 NewCurrentHealth);
 };

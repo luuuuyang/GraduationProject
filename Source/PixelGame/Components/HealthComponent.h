@@ -7,7 +7,7 @@
 #include "Widgets/HealthWidget.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DELEGATE_TwoParams(FOnHealthChanged, float, FText)
+DECLARE_DELEGATE_OneParam(FOnCurrentHealthChanged, int32)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PIXELGAME_API UHealthComponent : public UActorComponent
@@ -27,7 +27,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	FOnHealthChanged OnHealthChanged;
+	FOnCurrentHealthChanged OnCurrentHealthChanged;
 
 public:
 	UFUNCTION()
@@ -42,9 +42,6 @@ public:
 	UFUNCTION()
 	void DecreaseMaxHealth(int32 DecreaseValue);
 
-private:
-	FORCEINLINE void CalculateHealthPercent() { HealthPercent = float(CurrentHealth) / float(MaxHealth); }
-
 public:
 	FORCEINLINE void SetCurrentHealth(int32 Value) { CurrentHealth = Value; }
 	FORCEINLINE int32 GetCurrentHealth() const { return CurrentHealth; }
@@ -52,18 +49,14 @@ public:
 	FORCEINLINE void SetMaxHealth(int32 Value) { MaxHealth = Value; }
 	FORCEINLINE int32 GetMaxHealth() const { return MaxHealth; }
 
-	FORCEINLINE float GetHealthPercent() const { return HealthPercent; }
-
 private:
 	UPROPERTY()
 	class UHealthWidget* HealthWidget;
 
-	UPROPERTY()
+public:
+	UPROPERTY(EditAnywhere)
 	int32 CurrentHealth;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	int32 MaxHealth;
-
-	UPROPERTY()
-	float HealthPercent;
 };

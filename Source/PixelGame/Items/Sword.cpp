@@ -21,6 +21,7 @@ void ASword::Interact(AActor* Interactor)
 	
 	Cast<APixelGameCharacter>(Interactor)->GetEquipmentComponent()->AddEquipmentSlot(ASword::StaticClass(), Category);
 	Cast<APixelGameCharacter>(Interactor)->GetAttackComponent()->SetMeleeWeaponProperty(WeaponProperty);
+	Cast<APixelGameCharacter>(Interactor)->GetAttackComponent()->SetAttackTargetTagContainer(Cast<APixelGameCharacter>(Interactor)->GetEnemyTag());
 
 	APickupItem::Interact(Interactor);
 }

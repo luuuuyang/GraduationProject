@@ -8,6 +8,7 @@
 #include "Components/EquipmentComponent.h"
 #include "Components/HealthComponent.h"
 #include "Interfaces/ItemInteractionInterface.h"
+#include "Interfaces/GameplayTagInterface.h"
 #include "PixelGameCharacter.generated.h"
 
 class UTextRenderComponent;
@@ -33,7 +34,7 @@ enum class AnimationStateEnum : uint8
  * The Sprite component (inherited from APaperCharacter) handles the visuals
  */
 UCLASS(config=Game)
-class APixelGameCharacter : public APaperCharacter
+class APixelGameCharacter : public APaperCharacter, public IGameplayTagInterface
 {
 	GENERATED_BODY()
 
@@ -161,6 +162,16 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsAttacking;
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayTag")
+	FGameplayTagContainer OwnedTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayTag")
+	FGameplayTagContainer EnemyTag;
+
+	virtual FGameplayTagContainer GetOwnedTag() const override { return OwnedTag; }
+
+	virtual FGameplayTagContainer GetEnemyTag() const override { return EnemyTag; }
 
 // 定时器句柄
 protected:

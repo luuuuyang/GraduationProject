@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/Sword.h"
+#include "GameplayTagContainer.h"
 #include "AttackComponent.generated.h"
 
 
@@ -51,8 +52,13 @@ protected:
 
 	UPROPERTY()
 	bool DoOnce = true;
+
+	UPROPERTY()
+	FGameplayTagContainer AttackTargetTagContainer;
 public:
 	UFUNCTION()
 	void SetMeleeWeaponProperty(FMeleeWeaponProperty MeleeWeaponProperty);
-		
+
+	UFUNCTION()
+	void SetAttackTargetTagContainer(FGameplayTagContainer GameplayTagContainer);
 };

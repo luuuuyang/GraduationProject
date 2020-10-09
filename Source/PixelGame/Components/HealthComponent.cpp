@@ -12,7 +12,6 @@ UHealthComponent::UHealthComponent()
 
 	CurrentHealth = 100;
 	MaxHealth = 100;
-	CalculateHealthPercent();
 }
 
 
@@ -40,12 +39,11 @@ void UHealthComponent::IncreaseCurrentHealth(int32 IncreaseValue)
 void UHealthComponent::DecreaseCurrentHealth(int32 DecreaseValue)
 {
 	CurrentHealth -= DecreaseValue;
-	if (OnHealthChanged.IsBound())
+	UE_LOG(LogTemp, Warning, TEXT("%d"), CurrentHealth)
+	if (OnCurrentHealthChanged.IsBound())
 	{
-		CalculateHealthPercent();
-		FString HealthString = FString::FromInt(CurrentHealth) + FString(" / ") + FString::FromInt(MaxHealth);
-		FText HealthText = FText::FromString(HealthString);
-		OnHealthChanged.Execute(HealthPercent, HealthText);
+		UE_LOG(LogTemp, Warning, TEXT("before %d"), CurrentHealth)
+		OnCurrentHealthChanged.Execute(CurrentHealth);
 		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged"))
 	}
 	else

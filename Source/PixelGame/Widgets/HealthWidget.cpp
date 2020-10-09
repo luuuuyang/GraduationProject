@@ -3,8 +3,31 @@
 
 #include "HealthWidget.h"
 
-void UHealthWidget::UpdateWidget(float CurrentPercent, FText CurrentText)
+void UHealthWidget::InitializeHealthWidget(int32 InitCurrentHealth, int32 InitMaxHealth)
 {
-	UpdatePercent(CurrentPercent);
-	UpdateText(CurrentText);
+	CurrentHealth = InitCurrentHealth;
+	MaxHealth = InitMaxHealth;
+	HealthPercent = float(CurrentHealth) / float(MaxHealth);
+	HealthBar->SetPercent(HealthPercent);
+
+	if (IsValid(HealthText))
+	{
+		HealthPercentText = FText::FromString(FString::FromInt(CurrentHealth) + FString(" / ") + FString::FromInt(MaxHealth));
+		HealthText->SetText(HealthPercentText);
+	}
+}
+
+void UHealthWidget::OnCurrentHealthChanged(int32 NewCurrentHealth)
+{
+	CurrentHealth = NewCurrentHealth;
+	HealthPercent = float(CurrentHealth) / float(MaxHealth);
+
+	UE_LOG(LogTemp, Warning, TEXT("after %d"), NewCurrentHealth)
+	HealthBar->SetPercent(HealthPercent);
+
+	if (IsValid(HealthText))
+	{
+		HealthPercentText = FText::FromString(FString::FromInt(CurrentHealth) + FString(" / ") + FString::FromInt(MaxHealth));
+		HealthText->SetText(HealthPercentText);
+	}
 }

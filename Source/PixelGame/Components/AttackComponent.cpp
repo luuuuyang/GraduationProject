@@ -5,7 +5,8 @@
 #include "Character/PixelGameCharacter.h"
 #include "Items/PickupItem.h"
 #include "Engine/EngineTypes.h"
-#include "DrawDebugHelpers.h"
+#include "Components/HealthComponent.h"
+#include "Components/WidgetComponent.h"
 
 
 // Sets default values for this component's properties
@@ -64,7 +65,22 @@ void UAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 			{
 				for (auto Hit : HitResults)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Hit Success, %s"), *Hit.Actor->GetName())
+					UHealthComponent* HealthComponent = Cast<UHealthComponent>(Hit.Actor->GetComponentByClass(UHealthComponent::StaticClass()));
+					if (IsValid(HealthComponent))
+					{
+						if (Hit.Actor->GetClass()->ImplementsInterface(UGameplayTagInterface::StaticClass()))
+						{
+							if (Cast<IGameplayTagInterface>(Hit.Actor)->GetOwnedTag().HasAny(AttackTargetTagContainer))
+							{
+								HealthComponent->DecreaseCurrentHealth(MeleeWeapon.Top().Damage);
+							}
+							
+						}
+						
+						
+						
+					}
+					//UE_LOG(LogTemp, Warning, TEXT("Hit Success, %s"), *Hit.Actor->GetName())
 				}
 			}
 
@@ -88,4 +104,9 @@ void UAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UAttackComponent::SetMeleeWeaponProperty(FMeleeWeaponProperty MeleeWeaponProperty)
 {
 	MeleeWeapon.Emplace(MeleeWeaponProperty);
+}
+
+void UAttackComponent::SetAttackTargetTagContainer(FGameplayTagContainer GameplayTagContainer)
+{
+	AttackTargetTagContainer = GameplayTagContainer;
 }
