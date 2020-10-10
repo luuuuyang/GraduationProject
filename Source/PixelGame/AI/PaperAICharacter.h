@@ -28,6 +28,9 @@ public:
 	void OnDeath();
 
 	UFUNCTION()
+	void OnHurt(int32 NewCurrentHealth);
+
+	UFUNCTION()
 	FORCEINLINE class UAttackComponent* GetAttackComponent() const { return AttackComponent; }
 
 	UFUNCTION()

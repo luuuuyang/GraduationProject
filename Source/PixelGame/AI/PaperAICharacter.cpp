@@ -16,15 +16,28 @@ void APaperAICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UHealthWidget* HealthWidget = Cast<UHealthWidget>(HealthWidgetComponent->GetUserWidgetObject());
+
 	if (IsValid(HealthWidget))
 	{
 		HealthWidget->InitializeHealthWidget(HealthComponent->GetCurrentHealth(), HealthComponent->GetMaxHealth());
-		HealthComponent->OnCurrentHealthChanged.BindUFunction(HealthWidget, "OnCurrentHealthChanged");
+		HealthWidget->SetVisibility(ESlateVisibility::Hidden);
+		HealthComponent->OnCurrentHealthChanged.BindUFunction(this, "OnHurt");
+		HealthComponent->OnDeath.BindUFunction(this, "OnDeath");
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("GetUserWidgetObject Failure"))
 	}
+}
+
+void APaperAICharacter::OnHurt(int32 NewCurrentHealth)
+{
+	UHealthWidget* HealthWidget = Cast<UHealthWidget>(HealthWidgetComponent->GetUserWidgetObject());
+	if (!HealthWidget->IsVisible())
+	{
+		HealthWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+	HealthWidget->OnCurrentHealthChanged(NewCurrentHealth);
 }
 
 void APaperAICharacter::OnDeath()

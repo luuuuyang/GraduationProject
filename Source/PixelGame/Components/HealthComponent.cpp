@@ -39,16 +39,19 @@ void UHealthComponent::IncreaseCurrentHealth(int32 IncreaseValue)
 void UHealthComponent::DecreaseCurrentHealth(int32 DecreaseValue)
 {
 	CurrentHealth -= DecreaseValue;
-	UE_LOG(LogTemp, Warning, TEXT("%d"), CurrentHealth)
-	if (OnCurrentHealthChanged.IsBound())
+	if (CurrentHealth > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("before %d"), CurrentHealth)
-		OnCurrentHealthChanged.Execute(CurrentHealth);
-		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged"))
+		if (OnCurrentHealthChanged.IsBound())
+		{
+			OnCurrentHealthChanged.Execute(CurrentHealth);
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnHealthChanged Empty"))
+		if (OnDeath.IsBound())
+		{
+			OnDeath.Execute();
+		}
 	}
 }
 

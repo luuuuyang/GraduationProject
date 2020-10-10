@@ -8,7 +8,7 @@
 ASword::ASword()
 {
 	WeaponProperty.AttackSocket = FName("HitSocket");
-	WeaponProperty.Damage = 2;
+	WeaponProperty.Damage = 20;
 	WeaponProperty.AttackRadius = 5.0f;
 	WeaponProperty.AttackDuration = 0.4f;
 	WeaponProperty.KnockBackForce = FVector(100.0f, 0.0f, 200.0f);

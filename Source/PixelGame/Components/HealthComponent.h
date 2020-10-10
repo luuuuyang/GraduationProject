@@ -8,6 +8,7 @@
 #include "HealthComponent.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnCurrentHealthChanged, int32)
+DECLARE_DELEGATE(FOnDeath)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PIXELGAME_API UHealthComponent : public UActorComponent
@@ -28,6 +29,8 @@ public:
 
 public:
 	FOnCurrentHealthChanged OnCurrentHealthChanged;
+
+	FOnDeath OnDeath;
 
 public:
 	UFUNCTION()
