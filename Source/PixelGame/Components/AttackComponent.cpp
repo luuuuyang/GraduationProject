@@ -61,7 +61,7 @@ void UAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 			FCollisionQueryParams CollisionQueryParams;
 			CollisionQueryParams.AddIgnoredActors(ActorsToIgnore);
 
-			if (GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECollisionChannel::ECC_Camera, CollisionShape, CollisionQueryParams))
+			if (GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECollisionChannel::ECC_Visibility, CollisionShape, CollisionQueryParams))
 			{
 				for (auto Hit : HitResults)
 				{

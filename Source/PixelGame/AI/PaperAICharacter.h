@@ -8,6 +8,7 @@
 #include "Components/HealthComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Interfaces/GameplayTagInterface.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "PaperAICharacter.generated.h"
 
 /**
@@ -29,6 +30,9 @@ public:
 
 	UFUNCTION()
 	void OnHurt(int32 NewCurrentHealth);
+	
+	UFUNCTION()
+	void Patrol();
 
 	UFUNCTION()
 	FORCEINLINE class UAttackComponent* GetAttackComponent() const { return AttackComponent; }
@@ -38,6 +42,9 @@ public:
 
 	UFUNCTION()
 	FORCEINLINE class UWidgetComponent* GetHealthWidgetComponent() const { return HealthWidgetComponent; }
+public:
+	UPROPERTY(EditAnywhere)
+	UBehaviorTree* AIBehaviorTree;
 
 private:
 	UPROPERTY()

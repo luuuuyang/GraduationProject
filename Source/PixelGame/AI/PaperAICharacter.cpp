@@ -30,6 +30,12 @@ void APaperAICharacter::BeginPlay()
 	}
 }
 
+void APaperAICharacter::OnDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnDeath"))
+		Destroy();
+}
+
 void APaperAICharacter::OnHurt(int32 NewCurrentHealth)
 {
 	UHealthWidget* HealthWidget = Cast<UHealthWidget>(HealthWidgetComponent->GetUserWidgetObject());
@@ -40,8 +46,7 @@ void APaperAICharacter::OnHurt(int32 NewCurrentHealth)
 	HealthWidget->OnCurrentHealthChanged(NewCurrentHealth);
 }
 
-void APaperAICharacter::OnDeath()
+void APaperAICharacter::Patrol()
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnDeath"))
-	Destroy();
+
 }
