@@ -22,6 +22,7 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;
+
 public:
 	UPROPERTY(transient)
 	UBlackboardComponent* BlackboardComponent;

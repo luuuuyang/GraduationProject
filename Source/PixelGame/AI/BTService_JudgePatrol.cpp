@@ -2,12 +2,16 @@
 
 
 #include "BTService_JudgePatrol.h"
-#include "Components/CapsuleComponent.h"
+
 #include "DrawDebugHelpers.h"
 
 UBTService_JudgePatrol::UBTService_JudgePatrol()
 {
 	bNotifyBecomeRelevant = true;
+
+	ForwardTraceDistance = 20.0f;
+	DownwardTraceDistance = 20.0f;
+	CanPatrol = FName("CanPatrol");
 }
 
 void UBTService_JudgePatrol::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -15,33 +19,33 @@ void UBTService_JudgePatrol::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp,
 	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
 
 	AICharacter = Cast<APaperAICharacter>(OwnerComp.GetAIOwner()->GetPawn());
-	AICharacter->GetCapsuleComponent()->GetUnscaledCapsuleSize(ForwardTraceDistance, DownwardTraceDistance);
+	AICharacter->GetCapsuleComponent()->GetUnscaledCapsuleSize(CapsuleRadius, CapsuleHalfHeight);
 
-	OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetKeyName(0), true);
-
+	OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(CanPatrol, true);
 }
 
 void UBTService_JudgePatrol::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	FHitResult HitResult;
-	FVector Start = AICharacter->GetActorLocation();
-	FVector End = Start + AICharacter->GetActorForwardVector() * ForwardTraceDistance * 3.5f;
+	FHitResult ForwardTraceHitResult;
+	FVector ForwardTraceStart = AICharacter->GetActorLocation();;
+	FVector ForwardTraceEnd = ForwardTraceStart + AICharacter->GetActorForwardVector() * (CapsuleRadius + ForwardTraceDistance);
 
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
+	FHitResult DownwardTraceHitResult;
+	FVector DownwardTraceStart = ForwardTraceEnd;
+	FVector DownwardTraceEnd = DownwardTraceStart + AICharacter->GetActorUpVector() * -(CapsuleHalfHeight + DownwardTraceDistance);
+
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(AICharacter);
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_Visibility, CollisionQueryParams))
+
+	if (GetWorld()->LineTraceSingleByChannel(ForwardTraceHitResult, ForwardTraceStart, ForwardTraceEnd, ECollisionChannel::ECC_Visibility, CollisionQueryParams) ||
+	    !GetWorld()->LineTraceSingleByChannel(DownwardTraceHitResult, DownwardTraceStart, DownwardTraceEnd, ECollisionChannel::ECC_Visibility, CollisionQueryParams))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *HitResult.Actor->GetName())
-		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetKeyName(0), false);
-		FRotator FaceRotation = AICharacter->GetActorRotation().Add(0.0f, 180.0f, 0.0f);
-		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsRotator(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetKeyName(1), FaceRotation);
+		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(CanPatrol, false);
 	}
 	else
 	{
-		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetKeyName(0), true);
-		UE_LOG(LogTemp, Warning, TEXT("Not Hit"))
+		OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(CanPatrol, true);
 	}
 }

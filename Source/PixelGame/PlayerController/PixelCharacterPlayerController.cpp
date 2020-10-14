@@ -31,7 +31,6 @@ void APixelCharacterPlayerController::SetupInputComponent()
 void APixelCharacterPlayerController::OnMoveLeftRight(float Value)
 {
 	PixelCharacter->MoveLeftRight(Value);
-	//UE_LOG(LogTemp, Warning, TEXT("Press AD"))
 }
 
 void APixelCharacterPlayerController::OnMoveUpDown(float Value)

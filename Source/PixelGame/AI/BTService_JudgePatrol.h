@@ -6,6 +6,7 @@
 #include "BehaviorTree/BTService.h"
 #include "AI/PixelAIController.h"
 #include "AI/PaperAICharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "BTService_JudgePatrol.generated.h"
 
 /**
@@ -25,6 +26,12 @@ protected:
 
 private:
 	APaperAICharacter* AICharacter;
+
+	float CapsuleRadius;
+	float CapsuleHalfHeight;
+
 	float ForwardTraceDistance;
 	float DownwardTraceDistance;
+
+	FName CanPatrol;
 };

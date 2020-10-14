@@ -22,7 +22,5 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 	APaperAICharacter* AICharacter = Cast<APaperAICharacter>(OwnerComp.GetAIOwner()->GetPawn());
-
 	AICharacter->AddMovementInput(AICharacter->GetActorForwardVector());
-	UE_LOG(LogTemp, Warning, TEXT("Patrol"))
 }
